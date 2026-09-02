@@ -1,0 +1,212 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model CampaignSettings {
+  id               String   @id @default("default")
+  title            String   @default("Ação Entre Amigos")
+  subtitle         String   @default("Concorra a uma Motocicleta 0km")
+  drawDate         String   @default("2026-11-15")
+  drawTime         String   @default("19:00")
+  drawNotice       String?
+  minQuota         Int      @default(1000)
+  unitPrice        Float    @default(30.00)
+  promoBundleSize  Int      @default(3)
+  promoBundlePrice Float    @default(63.00)
+  startNumber      Int      @default(1000)
+  endNumber        Int      @default(3999)
+  presencialStart  Int      @default(1000)
+  presencialEnd    Int      @default(2999)
+  onlineStart      Int      @default(3000)
+  onlineEnd        Int      @default(3999)
+  whatsappNumber   String   @default("+5548992178109")
+  whatsappMessage  String   @default("Olá! Vim pelo site da ação entre amigos e gostaria de tirar uma dúvida.")
+  instagramUrl     String?
+  contactEmail     String   @default("suporte@acaoentreamigos.com")
+  rulesText        String
+  prizeModel       String   @default("Honda CG 160 Start")
+  prizeYear        String   @default("2023")
+  prizeColor       String   @default("Azul Metálico")
+  prizeMileage     String?
+  prizeCondition   String   @default("Semi-nova em excelente estado, revisada, documentação em dia e pronta para transferência")
+  prizeDetails     String?
+  prizeCoverImage  String   @default("/images/moto/moto-hero.jpg")
+  prizeImagesJson  String   @default("[]")
+  prizeVideoUrl    String?
+  paymentsEnabled  Boolean  @default(false)
+  activeGateway    String   @default("MOCK_PIX")
+  gatewayConfigJson String?
+  updatedAt        DateTime @updatedAt
+}
+
+model Partner {
+  id             String         @id @default(cuid())
+  slug           String         @unique
+  name           String
+  tradeName      String?
+  contactName    String?
+  phone          String?
+  whatsapp       String?
+  neighborhood   String
+  address        String?
+  number         String
+  complement     String?
+  cep            String
+  city           String         @default("Tubarão / SC")
+  googleMapsUrl  String?
+  logoUrl        String?
+  commissionRate Float          @default(30.0)
+  notes          String?
+  isActive       Boolean        @default(true)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  numbers        RaffleNumber[]
+  purchases      Purchase[]
+}
+
+model Participant {
+  id        String         @id @default(cuid())
+  fullName  String
+  cpf       String         @unique
+  whatsapp  String
+  email     String?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  numbers   RaffleNumber[]
+  purchases Purchase[]
+}
+
+model RaffleNumber {
+  id                   String       @id @default(cuid())
+  number               Int          @unique
+  status               String       @default("AVAILABLE") // AVAILABLE, RESERVED, PENDING_PAYMENT, PAID, BLOCKED
+  origin               String       @default("ONLINE")    // ONLINE, PRESENTIAL
+  participantId        String?
+  participant          Participant? @relation(fields: [participantId], references: [id])
+  partnerId            String?
+  partner              Partner?     @relation(fields: [partnerId], references: [id])
+  purchaseId           String?
+  purchase             Purchase?    @relation(fields: [purchaseId], references: [id])
+  reservedUntil        DateTime?
+  reservationSessionId String?
+  pricePaid            Float?
+  updatedAt            DateTime     @updatedAt
+
+  @@index([status])
+  @@index([origin])
+  @@index([partnerId])
+}
+
+model Purchase {
+  id             String         @id @default(cuid())
+  code           String         @unique
+  participantId  String
+  participant    Participant    @relation(fields: [participantId], references: [id])
+  partnerId      String?
+  partner        Partner?       @relation(fields: [partnerId], references: [id])
+  origin         String         @default("ONLINE")
+  totalOriginal  Float
+  discountAmount Float          @default(0.0)
+  totalPaid      Float
+  status         String         @default("PENDING") // PENDING, COMPLETED, EXPIRED, CANCELLED, REFUNDED
+  referralSlug   String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  numbers        RaffleNumber[]
+  items          PurchaseItem[]
+  payments       Payment[]
+}
+
+model PurchaseItem {
+  id         String   @id @default(cuid())
+  purchaseId String
+  purchase   Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  number     Int
+  unitPrice  Float
+  discount   Float    @default(0.0)
+  finalPrice Float
+}
+
+model Payment {
+  id               String    @id @default(cuid())
+  purchaseId       String
+  purchase         Purchase  @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  gateway          String    @default("MOCK_PIX")
+  gatewayPaymentId String?
+  amount           Float
+  pixCopiaECola    String
+  qrCodeBase64     String?
+  status           String    @default("PENDING") // PENDING, PAID, EXPIRED, FAILED
+  expiresAt        DateTime
+  paidAt           DateTime?
+  webhookPayload   String?
+  createdAt        DateTime  @default(now())
+}
+
+model DrawResult {
+  id                   String   @id @default(cuid())
+  drawDate             String
+  lotteryContestNumber String?
+  prize1               String?
+  prize2               String?
+  prize3               String?
+  prize4               String?
+  prize5               String?
+  winningPrizeTier     Int?
+  winningNumber        Int?
+  winnerMaskedName     String?
+  winnerParticipantId  String?
+  status               String   @default("SCHEDULED") // SCHEDULED, COMPLETED, PENDING_NEW_DATE
+  proofUrl             String?
+  notes                String?
+  isPublished          Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model DrawHistory {
+  id            String   @id @default(cuid())
+  date          String
+  contestNumber String?
+  status        String
+  reason        String
+  notes         String?
+  createdAt     DateTime @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  adminEmail String
+  action     String
+  entityType String
+  entityId   String?
+  oldValue   String?
+  newValue   String?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+}
+
+model VerificationSession {
+  id        String   @id @default(cuid())
+  cpf       String
+  code      String
+  token     String   @unique
+  expiresAt DateTime
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
