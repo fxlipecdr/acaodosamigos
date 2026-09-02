@@ -24,26 +24,33 @@ import {
 export const revalidate = 0; // Fresh live data on each request
 
 export default async function HomePage() {
-  // Fetch campaign settings, stats, and partners from DB
-  const settings = await db.campaignSettings.findUnique({
-    where: { id: "default" },
-  });
+  let settings: any = null;
+  let totalNumbers = 3000;
+  let totalSold = 0;
+  let totalReserved = 0;
+  let partnersSample: any[] = [];
 
-  const [
-    totalNumbers,
-    totalSold,
-    totalReserved,
-    partnersSample
-  ] = await Promise.all([
-    db.raffleNumber.count(),
-    db.raffleNumber.count({ where: { status: "PAID" } }),
-    db.raffleNumber.count({ where: { status: "RESERVED" } }),
-    db.partner.findMany({
-      where: { isActive: true },
-      take: 4,
-      orderBy: { createdAt: "asc" },
-    }),
-  ]);
+  try {
+    const [dbSettings, dbNumbers, dbSold, dbReserved, dbPartners] = await Promise.all([
+      db.campaignSettings.findUnique({ where: { id: "default" } }),
+      db.raffleNumber.count(),
+      db.raffleNumber.count({ where: { status: "PAID" } }),
+      db.raffleNumber.count({ where: { status: "RESERVED" } }),
+      db.partner.findMany({
+        where: { isActive: true },
+        take: 4,
+        orderBy: { createdAt: "asc" },
+      }),
+    ]);
+
+    settings = dbSettings;
+    totalNumbers = dbNumbers || 3000;
+    totalSold = dbSold;
+    totalReserved = dbReserved;
+    partnersSample = dbPartners;
+  } catch (err) {
+    console.error("Database read fallback in HomePage:", err);
+  }
 
   const totalAvailable = Math.max(0, totalNumbers - totalSold - totalReserved);
   
@@ -52,7 +59,12 @@ export default async function HomePage() {
   const [year, month, day] = drawDateRaw.split("-");
   const formattedDrawDate = `${day}/${month}/${year}`;
 
-  const prizeImages = settings?.prizeImagesJson ? JSON.parse(settings.prizeImagesJson) : [];
+  let prizeImages = [];
+  try {
+    prizeImages = settings?.prizeImagesJson ? JSON.parse(settings.prizeImagesJson) : [];
+  } catch {
+    prizeImages = [];
+  }
 
   return (
     <div className="space-y-16 sm:space-y-24 pb-12">

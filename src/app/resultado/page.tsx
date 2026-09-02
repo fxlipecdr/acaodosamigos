@@ -6,15 +6,26 @@ import LotteryVisualizer from "@/components/LotteryVisualizer";
 export const revalidate = 0;
 
 export default async function ResultadoPage() {
-  const [settings, drawResult, drawHistory] = await Promise.all([
-    db.campaignSettings.findUnique({ where: { id: "default" } }),
-    db.drawResult.findFirst({
-      where: { id: "current-draw" },
-    }),
-    db.drawHistory.findMany({
-      orderBy: { createdAt: "desc" },
-    }),
-  ]);
+  let settings: any = null;
+  let drawResult: any = null;
+  let drawHistory: any[] = [];
+
+  try {
+    const [dbSettings, dbDrawResult, dbDrawHistory] = await Promise.all([
+      db.campaignSettings.findUnique({ where: { id: "default" } }),
+      db.drawResult.findFirst({
+        where: { id: "current-draw" },
+      }),
+      db.drawHistory.findMany({
+        orderBy: { createdAt: "desc" },
+      }),
+    ]);
+    settings = dbSettings;
+    drawResult = dbDrawResult;
+    drawHistory = dbDrawHistory;
+  } catch (err) {
+    console.error("Database read fallback in ResultadoPage:", err);
+  }
 
   const drawDateRaw = settings?.drawDate || "2026-11-15";
   const [year, month, day] = drawDateRaw.split("-");

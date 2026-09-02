@@ -5,9 +5,14 @@ import { FileText, Calendar, ShieldCheck, Scale, AlertTriangle, CheckCircle2, Aw
 export const revalidate = 0;
 
 export default async function RegrasPage() {
-  const settings = await db.campaignSettings.findUnique({
-    where: { id: "default" },
-  });
+  let settings: any = null;
+  try {
+    settings = await db.campaignSettings.findUnique({
+      where: { id: "default" },
+    });
+  } catch (err) {
+    console.error("Database read fallback in RegrasPage:", err);
+  }
 
   const drawDateRaw = settings?.drawDate || "2026-11-15";
   const [year, month, day] = drawDateRaw.split("-");

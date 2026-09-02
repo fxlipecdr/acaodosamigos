@@ -5,13 +5,18 @@ import { MapPin } from "lucide-react";
 export const revalidate = 0; // Fresh list from DB
 
 export default async function PontosDeVendaPage() {
-  const partners = await db.partner.findMany({
-    where: { isActive: true },
-    orderBy: [
-      { neighborhood: "asc" },
-      { name: "asc" },
-    ],
-  });
+  let partners: any[] = [];
+  try {
+    partners = await db.partner.findMany({
+      where: { isActive: true },
+      orderBy: [
+        { neighborhood: "asc" },
+        { name: "asc" },
+      ],
+    });
+  } catch (err) {
+    console.error("Database read fallback in PontosDeVendaPage:", err);
+  }
 
   return (
     <div className="min-h-screen py-8 sm:py-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
