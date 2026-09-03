@@ -192,11 +192,19 @@ export default async function HomePage() {
             {/* Right Hero Image (5 cols) */}
             <div className="lg:col-span-5 relative">
               <div className="relative w-full rounded-2xl overflow-hidden border border-dark-700 bg-dark-850 p-2 shadow-2xl group">
-                <div className="relative h-[240px] sm:h-[380px] lg:h-[420px] w-full rounded-xl overflow-hidden bg-gradient-to-b from-dark-900 via-dark-850 to-dark-900 flex items-center justify-center p-2 sm:p-4">
+                {/* Quadro em 4:5 acompanhando a proporção das fotos da moto,
+                    para a imagem ocupar o espaço todo sem cortes. */}
+                <div className="relative w-full max-w-[340px] sm:max-w-[380px] lg:max-w-[420px] mx-auto aspect-[4/5] rounded-xl overflow-hidden bg-gradient-to-b from-dark-900 via-dark-850 to-dark-900">
+                  <img
+                    src={settings?.prizeCoverImage || "/images/moto/moto-hero.jpg"}
+                    alt=""
+                    aria-hidden
+                    className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-25 pointer-events-none"
+                  />
                   <img
                     src={settings?.prizeCoverImage || "/images/moto/moto-hero.jpg"}
                     alt="Motocicleta Honda CG 160 Start"
-                    className="max-h-full max-w-full object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]"
+                    className="relative w-full h-full object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]"
                   />
                   
                   {/* Overlay Tag */}

@@ -87,15 +87,32 @@ export default function MotorcycleGallery({
               {allImages.map((img, idx) => (
                 <div
                   key={idx}
-                  className="snap-item w-full h-[260px] sm:h-[380px] lg:h-[420px] flex items-center justify-center p-3 sm:p-4"
+                  className="snap-item w-full flex items-center justify-center"
                   aria-label={`Foto ${idx + 1} de ${allImages.length}`}
                 >
-                  <img
-                    src={img.url}
-                    alt={img.title}
-                    loading={idx === 0 ? "eager" : "lazy"}
-                    className="max-h-full max-w-full object-contain drop-shadow-2xl"
-                  />
+                  {/* Quadro em 4:5, a mesma proporção das fotos (819x1024).
+                      Assim a imagem preenche o espaço inteiro sem corte, em vez
+                      de ficar pequena entre faixas vazias. O teto de largura
+                      impede que ele fique alto demais em telas grandes. */}
+                  {/* overflow-hidden contém o fundo com scale-110; sem isso ele
+                      vaza para fora e alarga a área rolável do carrossel,
+                      desalinhando o snap. */}
+                  <div className="relative w-full max-w-[360px] sm:max-w-[400px] lg:max-w-[440px] aspect-[4/5] mx-auto overflow-hidden rounded-lg">
+                    {/* Fundo desfocado da própria foto: preenche as sobras caso
+                        o administrador suba uma imagem de outra proporção. */}
+                    <img
+                      src={img.url}
+                      alt=""
+                      aria-hidden
+                      className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-25 pointer-events-none"
+                    />
+                    <img
+                      src={img.url}
+                      alt={img.title}
+                      loading={idx === 0 ? "eager" : "lazy"}
+                      className="relative w-full h-full object-contain drop-shadow-2xl"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
@@ -172,17 +189,20 @@ export default function MotorcycleGallery({
                   key={idx}
                   onClick={() => goTo(idx)}
                   aria-label={`Ver foto ${idx + 1}`}
-                  className={`relative h-16 sm:h-20 rounded-lg overflow-hidden border-2 transition-all p-1 bg-dark-950 flex items-center justify-center ${
+                  className={`relative aspect-[4/5] rounded-lg overflow-hidden border-2 transition-all bg-dark-950 ${
                     selectedIdx === idx
                       ? "border-primary-500 shadow-glow-primary scale-105"
                       : "border-dark-750 opacity-70 hover:opacity-100"
                   }`}
                 >
+                  {/* Miniatura usa object-cover: aqui ela é só um alvo de
+                      navegação, e preencher o quadro lê melhor do que uma
+                      imagem minúscula cercada de vazio. */}
                   <img
                     src={img.url}
                     alt=""
                     loading="lazy"
-                    className="max-h-full max-w-full object-contain"
+                    className="w-full h-full object-cover"
                   />
                 </button>
               ))}
