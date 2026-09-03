@@ -5,11 +5,28 @@ import { calculateOrderPrice } from "@/lib/pricing";
 import { generatePixPayload, generateQrCodeDataUrl } from "@/lib/pix";
 import crypto from "crypto";
 import { getOnlineRange, validateOnlineNumbers } from "@/lib/onlineRange";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
+    const rateLimit = checkRateLimit(request, {
+      keyPrefix: "pix",
+      limit: 6,
+      windowMs: 60 * 1000,
+    });
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Muitas tentativas de geração de Pix. Aguarde ${rateLimit.resetInSeconds} segundos para tentar novamente.`,
+        },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const {
       fullName,

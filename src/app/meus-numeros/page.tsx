@@ -8,7 +8,7 @@ import {
   Ticket, 
   Calendar, 
   Lock, 
-  KeyRound, 
+  Phone,
   ArrowRight, 
   AlertCircle, 
   CheckCircle2, 
@@ -21,15 +21,10 @@ import { formatCPF, cleanCPF, validateCPF } from "@/lib/cpf";
 
 export default function MeusNumerosPage() {
   const [cpf, setCpf] = useState("");
-  const [step, setStep] = useState<"cpf" | "otp" | "result">("cpf");
+  const [last4Digits, setLast4Digits] = useState("");
+  const [step, setStep] = useState<"form" | "result">("form");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  // OTP state
-  const [token, setToken] = useState("");
-  const [maskedPhone, setMaskedPhone] = useState("");
-  const [otpCode, setOtpCode] = useState("");
-  const [demoCode, setDemoCode] = useState<string | undefined>();
 
   // Result state
   const [resultData, setResultData] = useState<any>(null);
@@ -39,62 +34,40 @@ export default function MeusNumerosPage() {
     setCpf(formatCPF(raw));
   };
 
-  const handleRequestOtp = async (e: React.FormEvent) => {
+  const handleLast4Change = (val: string) => {
+    const raw = val.replace(/\D/g, "").slice(0, 4);
+    setLast4Digits(raw);
+  };
+
+  const handleLookup = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
     const cleanCpfVal = cleanCPF(cpf);
     if (!validateCPF(cleanCpfVal)) {
-      setErrorMessage("Por favor, digite um CPF válido.");
+      setErrorMessage("Por favor, informe um CPF válido com 11 dígitos.");
+      return;
+    }
+
+    if (last4Digits.length !== 4) {
+      setErrorMessage("Por favor, digite os 4 últimos dígitos do WhatsApp cadastrado.");
       return;
     }
 
     try {
       setLoading(true);
-      const res = await fetch("/api/verify/request", {
+      const res = await fetch("/api/verify/lookup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cpf: cleanCpfVal }),
+        body: JSON.stringify({
+          cpf: cleanCpfVal,
+          last4Digits: last4Digits.trim(),
+        }),
       });
 
       const data = await res.json();
       if (!res.ok || !data.success) {
-        setErrorMessage(data.error || "Nenhum número encontrado para este CPF.");
-        return;
-      }
-
-      setToken(data.token);
-      setMaskedPhone(data.maskedPhone);
-      setDemoCode(data.demoCode);
-      setStep("otp");
-    } catch (err) {
-      console.error("Erro:", err);
-      setErrorMessage("Erro de conexão ao consultar CPF.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleConfirmOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMessage(null);
-
-    if (otpCode.length < 6) {
-      setErrorMessage("Digite o código de 6 dígitos.");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const res = await fetch("/api/verify/confirm", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, code: otpCode }),
-      });
-
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        setErrorMessage(data.error || "Código incorreto.");
+        setErrorMessage(data.error || "Nenhum bilhete encontrado ou dados não conferem.");
         return;
       }
 
@@ -102,7 +75,7 @@ export default function MeusNumerosPage() {
       setStep("result");
     } catch (err) {
       console.error("Erro:", err);
-      setErrorMessage("Erro de conexão ao verificar código.");
+      setErrorMessage("Erro de conexão ao consultar bilhetes. Tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -121,7 +94,7 @@ export default function MeusNumerosPage() {
           CONSULTAR MEUS NÚMEROS
         </h1>
         <p className="text-xs sm:text-sm text-slate-400">
-          Consulte seus bilhetes cadastrados com autenticação em duas etapas para garantir sua privacidade.
+          Informe seu CPF e os 4 últimos dígitos do WhatsApp cadastrado na compra para visualizar seus bilhetes ativos.
         </p>
       </div>
 
@@ -132,25 +105,47 @@ export default function MeusNumerosPage() {
         </div>
       )}
 
-      {step === "cpf" && (
-        /* ETAPA 1: DIGITAR CPF */
+      {step === "form" && (
         <div className="max-w-md mx-auto p-5 sm:p-8 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card space-y-5 sm:space-y-6">
-          <form onSubmit={handleRequestOtp} className="space-y-4">
+          <form onSubmit={handleLookup} className="space-y-4">
+            
+            {/* Campo CPF */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                INFORME O SEU CPF:
+                1. SEU CPF:
               </label>
               <input
                 type="text"
                 required
                 inputMode="numeric"
                 pattern="[0-9.\-]*"
-                enterKeyHint="go"
+                enterKeyHint="next"
                 autoComplete="off"
                 placeholder="000.000.000-00"
                 value={cpf}
                 onChange={(e) => handleCpfChange(e.target.value)}
                 className="w-full h-12 px-4 bg-dark-900 border border-dark-700 rounded-xl text-base text-foreground placeholder:text-slate-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 font-mono tracking-wide"
+              />
+            </div>
+
+            {/* Campo 4 Últimos Dígitos */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
+                <span>2. 4 ÚLTIMOS DÍGITOS DO WHATSAPP:</span>
+                <span className="text-[10px] text-slate-500 font-normal">Ex: (48) 9****-<strong>8109</strong></span>
+              </label>
+              <input
+                type="text"
+                required
+                maxLength={4}
+                inputMode="numeric"
+                pattern="[0-9]*"
+                enterKeyHint="go"
+                autoComplete="off"
+                placeholder="Ex: 8109"
+                value={last4Digits}
+                onChange={(e) => handleLast4Change(e.target.value)}
+                className="w-full h-12 px-4 bg-dark-900 border border-dark-700 rounded-xl text-base text-center font-mono font-black text-primary-400 placeholder:text-slate-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 tracking-widest"
               />
             </div>
 
@@ -162,11 +157,11 @@ export default function MeusNumerosPage() {
               {loading ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>BUSCANDO REGISTROS...</span>
+                  <span>CONSULTANDO REGISTROS...</span>
                 </>
               ) : (
                 <>
-                  <span>CONSULTAR POR CPF</span>
+                  <span>BUSCAR MEUS NÚMEROS</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
@@ -176,86 +171,16 @@ export default function MeusNumerosPage() {
           <div className="p-3.5 rounded-xl bg-dark-900 border border-dark-750 text-[11px] text-slate-400 space-y-1 uppercase font-semibold">
             <p className="flex items-center gap-1.5 text-slate-300">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              CONFORMIDADE COM A LGPD
+              PRIVACIDADE E SEGURANÇA
             </p>
-            <p className="text-[10px] text-slate-400">
-              Por segurança, um código de verificação será solicitado antes de exibir seus bilhetes.
+            <p className="text-[10px] text-slate-400 normal-case">
+              Os 4 últimos dígitos do seu telefone confirmam sua identidade com segurança sem necessidade de aguardar códigos por SMS.
             </p>
-          </div>
-        </div>
-      )}
-
-      {step === "otp" && (
-        /* ETAPA 2: CÓDIGO OTP */
-        <div className="max-w-md mx-auto p-6 sm:p-8 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card space-y-6">
-          <div className="text-center space-y-1">
-            <div className="w-12 h-12 rounded-xl bg-primary-500/20 text-primary-400 flex items-center justify-center mx-auto">
-              <KeyRound className="w-6 h-6" />
-            </div>
-            <h3 className="text-lg font-heading font-black text-foreground uppercase tracking-tight">VERIFICAÇÃO DE SEGURANÇA</h3>
-            <p className="text-xs text-slate-400">
-              Código enviado para o telefone <strong>{maskedPhone}</strong>
-            </p>
-          </div>
-
-          {demoCode && (
-            <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs text-center font-bold uppercase tracking-wider">
-              CÓDIGO DE TESTE RÁPIDO: <strong className="font-mono text-sm">{demoCode}</strong>
-            </div>
-          )}
-
-          <form onSubmit={handleConfirmOtp} className="space-y-4">
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block text-center">
-                DIGITE O CÓDIGO DE 6 DÍGITOS:
-              </label>
-              <input
-                type="text"
-                maxLength={6}
-                required
-                inputMode="numeric"
-                pattern="[0-9]*"
-                autoComplete="one-time-code"
-                enterKeyHint="go"
-                placeholder="000000"
-                value={otpCode}
-                onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ""))}
-                className="w-full h-16 bg-dark-900 border border-dark-700 rounded-xl text-3xl font-mono font-black text-center text-primary-400 tracking-[0.3em] focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full h-14 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-dark-900 font-black text-sm uppercase tracking-wider shadow-glow-emerald active:scale-[0.98] transition-transform flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-              {loading ? (
-                <>
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>VALIDANDO CÓDIGO...</span>
-                </>
-              ) : (
-                <>
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>CONFIRMAR E VISUALIZAR</span>
-                </>
-              )}
-            </button>
-          </form>
-
-          <div className="text-center">
-            <button
-              onClick={() => setStep("cpf")}
-              className="text-xs text-slate-400 hover:text-slate-200 font-bold uppercase tracking-wider"
-            >
-              VOLTAR E ALTERAR CPF
-            </button>
           </div>
         </div>
       )}
 
       {step === "result" && resultData && (
-        /* ETAPA 3: LISTA DOS NÚMEROS DO PARTICIPANTE */
         <div className="space-y-6 animate-in fade-in">
           
           {/* Header Card */}
@@ -263,7 +188,7 @@ export default function MeusNumerosPage() {
             <div>
               <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">PARTICIPANTE</span>
               <h3 className="text-xl font-heading font-black text-foreground uppercase tracking-tight mt-0.5">{resultData.participant.maskedName}</h3>
-              <p className="text-xs font-mono text-slate-500 uppercase">CPF: {resultData.participant.maskedCpf}</p>
+              <p className="text-xs font-mono text-slate-500 uppercase">CPF: {resultData.participant.maskedCpf} • Tel: {resultData.participant.maskedPhone}</p>
             </div>
 
             <div className="p-3 bg-dark-900 rounded-xl border border-dark-750 text-right uppercase">
@@ -330,7 +255,7 @@ export default function MeusNumerosPage() {
 
           <div className="text-center pt-4">
             <button
-              onClick={() => { setStep("cpf"); setCpf(""); setOtpCode(""); setResultData(null); }}
+              onClick={() => { setStep("form"); setCpf(""); setLast4Digits(""); setResultData(null); }}
               className="text-xs text-primary-400 hover:text-primary-300 font-bold uppercase tracking-wider underline"
             >
               FAZER UMA NOVA CONSULTA

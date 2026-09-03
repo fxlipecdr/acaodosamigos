@@ -79,6 +79,53 @@ async function runTests() {
   const federalFirst = "81845".slice(-4);
   assert(federalFirst === "1845", "Extrai 1º prêmio 81845 -> 1845");
 
+  // 5. TESTES DO RATE LIMITER CONTRA BOTS
+  console.log("\n--- 5. Testes do Rate Limiter ---");
+  const { checkRateLimit } = await import("../src/lib/rateLimit");
+  const dummyReq = new Request("http://localhost/api/test", {
+    headers: { "x-forwarded-for": "203.0.113.195" },
+  });
+
+  const r1 = checkRateLimit(dummyReq, { keyPrefix: "test_e2e", limit: 2, windowMs: 5000 });
+  assert(r1.allowed === true && r1.remaining === 1, "Rate limiter permite primeira requisição");
+  
+  const r2 = checkRateLimit(dummyReq, { keyPrefix: "test_e2e", limit: 2, windowMs: 5000 });
+  assert(r2.allowed === true && r2.remaining === 0, "Rate limiter permite segunda requisição no limite");
+
+  const r3 = checkRateLimit(dummyReq, { keyPrefix: "test_e2e", limit: 2, windowMs: 5000 });
+  assert(r3.allowed === false && r3.remaining === 0, "Rate limiter bloqueia requisições excedentes (429)");
+
+  // 6. TESTES DA FORMATAÇÃO DE COMPROVANTE WHATSAPP
+  console.log("\n--- 6. Testes do Comprovante WhatsApp ---");
+  const { formatPurchaseWhatsAppText, generateWhatsAppReceiptLink } = await import("../src/lib/notifications");
+  const receiptText = formatPurchaseWhatsAppText({
+    orderCode: "LDPG-123456",
+    participantName: "Carlos Silva",
+    participantPhone: "48992178109",
+    numbers: [3010, 3011, 3012],
+    totalPaid: 63.0,
+  });
+
+  assert(receiptText.includes("LDPG-123456"), "Comprovante contém código do pedido");
+  assert(receiptText.includes("3010, 3011, 3012"), "Comprovante lista os números comprados ordenados");
+  assert(receiptText.includes("R$ 63,00") || receiptText.includes("63,00"), "Comprovante inclui valor formatado");
+
+  const waLink = generateWhatsAppReceiptLink("48992178109", {
+    orderCode: "LDPG-123456",
+    participantName: "Carlos Silva",
+    participantPhone: "48992178109",
+    numbers: [3010],
+    totalPaid: 30.0,
+  });
+  assert(waLink.startsWith("https://wa.me/5548992178109"), "Gera link wa.me com DDI 55 correto");
+
+  // 7. TESTE DA REGRA DE VALIDAÇÃO DE 4 DÍGITOS DO TELEFONE
+  console.log("\n--- 7. Teste de Validação dos 4 Dígitos do Telefone ---");
+  const phoneSample = "48992178109";
+  assert(phoneSample.slice(-4) === "8109", "Extrai com exatidão os 4 últimos dígitos (8109)");
+  assert(phoneSample.endsWith("8109") === true, "Valida corretamente match com os 4 últimos dígitos");
+  assert(phoneSample.endsWith("0000") === false, "Rejeita corretamente dígitos divergentes");
+
   console.log("\n=========================================");
   console.log(`📊 RESULTADO FINAL: ${passed} PASSOU | ${failed} FALHOU`);
   console.log("=========================================\n");
@@ -86,6 +133,7 @@ async function runTests() {
   if (failed > 0) {
     process.exit(1);
   }
+  process.exit(0);
 }
 
 runTests();

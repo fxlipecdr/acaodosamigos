@@ -2,11 +2,30 @@ import { NextResponse } from "next/server";
 import db from "@/lib/db";
 import crypto from "crypto";
 import { getOnlineRange, validateOnlineNumbers } from "@/lib/onlineRange";
+import { cleanExpiredReservations } from "@/lib/reservations";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
+    // Proteção contra robôs e reservas massivas abusivas
+    const rateLimit = checkRateLimit(request, {
+      keyPrefix: "reserve",
+      limit: 12,
+      windowMs: 60 * 1000,
+    });
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Muitas tentativas de reserva. Aguarde ${rateLimit.resetInSeconds} segundos para tentar novamente.`,
+        },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const { numbers, sessionId } = body;
 
@@ -28,19 +47,8 @@ export async function POST(request: Request) {
 
     // Executa em transação atômica
     const result = await db.$transaction(async (tx) => {
-      // 1. Limpar reservas expiradas primeiro
-      await tx.raffleNumber.updateMany({
-        where: {
-          number: { in: numbers },
-          status: "RESERVED",
-          reservedUntil: { lt: now },
-        },
-        data: {
-          status: "AVAILABLE",
-          reservedUntil: null,
-          reservationSessionId: null,
-        },
-      });
+      // 1. Limpar todas as reservas expiradas (RESERVED e PENDING_PAYMENT)
+      await cleanExpiredReservations(tx);
 
       // 2. Buscar status atual de todos os números solicitados
       const currentNumbers = await tx.raffleNumber.findMany({
@@ -52,7 +60,12 @@ export async function POST(request: Request) {
       // 3. Checar se algum número não está disponível para esta sessão
       const unavailable = currentNumbers.filter((n) => {
         if (n.status === "PAID" || n.status === "BLOCKED") return true;
-        if (n.status === "RESERVED" && n.reservationSessionId !== currentSessionId) return true;
+        if (
+          (n.status === "RESERVED" || n.status === "PENDING_PAYMENT") &&
+          n.reservationSessionId !== currentSessionId
+        ) {
+          return true;
+        }
         return false;
       });
 

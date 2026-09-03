@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import db from "@/lib/db";
+import { cleanExpiredReservations } from "@/lib/reservations";
 
 export const dynamic = "force-dynamic";
 
@@ -9,22 +10,8 @@ export async function GET(request: Request) {
     const search = searchParams.get("search");
     const mode = searchParams.get("mode") || "ONLINE"; // ONLINE or ALL
 
-    // 1. Limpeza atômica de reservas expiradas antes de responder
-    const now = new Date();
-    await db.raffleNumber.updateMany({
-      where: {
-        status: "RESERVED",
-        reservedUntil: {
-          lt: now,
-        },
-      },
-      data: {
-        status: "AVAILABLE",
-        reservedUntil: null,
-        reservationSessionId: null,
-        participantId: null,
-      },
-    });
+    // 1. Limpeza atômica de reservas expiradas antes de responder (RESERVED e PENDING_PAYMENT)
+    await cleanExpiredReservations(db);
 
     const settings = await db.campaignSettings.findUnique({
       where: { id: "default" },

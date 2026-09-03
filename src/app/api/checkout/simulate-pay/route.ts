@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import db from "@/lib/db";
+import { sendWhatsAppApiNotification } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +19,7 @@ export async function POST(request: Request) {
     const purchase = await db.purchase.findUnique({
       where: { code: orderCode },
       include: {
+        participant: true,
         numbers: true,
         items: true,
         payments: {
@@ -43,6 +45,7 @@ export async function POST(request: Request) {
     }
 
     const now = new Date();
+    const numberList = purchase.items.map((it) => it.number);
 
     await db.$transaction(async (tx) => {
       // 1. Atualizar compra para COMPLETED
@@ -63,8 +66,7 @@ export async function POST(request: Request) {
       }
 
       // 3. Atualizar números associados para PAID
-      const numberList = purchase.items.map((it) => it.number);
-      const avgPrice = purchase.totalPaid / numberList.length;
+      const avgPrice = purchase.totalPaid / (numberList.length || 1);
 
       for (const num of numberList) {
         await tx.raffleNumber.update({
@@ -78,6 +80,17 @@ export async function POST(request: Request) {
         });
       }
     });
+
+    // Dispara notificação no WhatsApp se API estiver configurada
+    if (purchase.participant?.whatsapp) {
+      sendWhatsAppApiNotification({
+        orderCode: purchase.code,
+        participantName: purchase.participant.fullName,
+        participantPhone: purchase.participant.whatsapp,
+        numbers: numberList,
+        totalPaid: purchase.totalPaid,
+      }).catch((err) => console.error("Erro ao enviar WhatsApp:", err));
+    }
 
     return NextResponse.json({
       success: true,

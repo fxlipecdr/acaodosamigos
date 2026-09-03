@@ -17,6 +17,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { formatCurrency } from "@/lib/pricing";
+import { generateWhatsAppReceiptLink } from "@/lib/notifications";
 
 function ConfirmationContent() {
   const searchParams = useSearchParams();
@@ -158,6 +159,24 @@ function ConfirmationContent() {
 
         {/* Action Buttons (Hidden when printing) */}
         <div className="space-y-3 print:hidden">
+          {orderData && (
+            <a
+              href={generateWhatsAppReceiptLink(orderData.participantPhone || "48992178109", {
+                orderCode: orderData.orderCode,
+                participantName: orderData.participantName,
+                participantPhone: orderData.participantPhone || "",
+                numbers: orderData.numbers || [],
+                totalPaid: orderData.totalPaid || 0,
+              })}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-4 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-dark-900 font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-glow-emerald active:scale-[0.98] transition-all"
+            >
+              <MessageCircle className="w-5 h-5 fill-dark-900" />
+              <span>RECEBER COMPROVANTE NO MEU WHATSAPP</span>
+            </a>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button
               onClick={handlePrint}

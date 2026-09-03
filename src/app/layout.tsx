@@ -45,18 +45,25 @@ export async function generateMetadata(): Promise<Metadata> {
         template: `%s | ${title}`,
       },
       description,
-      metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+      metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://acaoentreamigos.com"),
       openGraph: {
         title,
         description,
+        siteName: "Ação Entre Amigos",
         type: "website",
         locale: "pt_BR",
         images: [
           {
-            url: "/images/moto/moto-hero.jpg",
+            url: "/images/banner-rifa.jpg",
             width: 1200,
             height: 630,
             alt: "Ação Entre Amigos Honda CG 160 Start",
+          },
+          {
+            url: "/images/moto/moto-hero.jpg",
+            width: 800,
+            height: 1000,
+            alt: "Motocicleta Honda CG 160 Start",
           },
         ],
       },
@@ -64,7 +71,7 @@ export async function generateMetadata(): Promise<Metadata> {
         card: "summary_large_image",
         title,
         description,
-        images: ["/images/moto/moto-hero.jpg"],
+        images: ["/images/banner-rifa.jpg"],
       },
       icons: {
         icon: "/favicon.ico",
@@ -72,8 +79,8 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   } catch {
     return {
-      title: "Ação Entre Amigos | Moto 0km",
-      description: "Concorra a uma moto 0km pela Loteria Federal.",
+      title: "Ação Entre Amigos | Honda CG 160 Start",
+      description: "Concorra a uma motocicleta Honda CG 160 Start com apuração transparente pela Loteria Federal. 3 cotas por R$ 63!",
     };
   }
 }

@@ -44,6 +44,7 @@ export async function GET(request: Request) {
       orderCode: purchase.code,
       totalPaid: purchase.totalPaid,
       participantName: purchase.participant.fullName,
+      participantPhone: purchase.participant.whatsapp,
       numbers: purchase.numbers.map((n) => n.number),
       paidAt: payment?.paidAt || null,
     });
