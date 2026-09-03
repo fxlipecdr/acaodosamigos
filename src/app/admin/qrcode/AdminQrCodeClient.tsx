@@ -23,7 +23,7 @@ export default function AdminQrCodeClient({
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const [targetUrl, setTargetUrl] = useState<string>("");
 
-  const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://acaoentreamigos.com";
+  const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://acaodosamigos.com.br";
 
   useEffect(() => {
     let url = baseUrl;
@@ -124,7 +124,7 @@ export default function AdminQrCodeClient({
         {/* Top Flyer Header */}
         <div className="space-y-2">
           <div className="inline-block px-3 py-1 bg-dark-900 text-primary-400 text-xs font-black uppercase rounded-full tracking-wider">
-            AÇÃO ENTRE AMIGOS OFICIAL
+            AÇÃO DOS AMIGOS OFICIAL
           </div>
           <h2 className="text-3xl font-heading font-black tracking-tight leading-tight text-dark-900 uppercase">
             CONCORRA A ESTA <br />

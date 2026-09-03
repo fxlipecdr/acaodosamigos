@@ -1,6 +1,6 @@
-# 🏍️ AÇÃO ENTRE AMIGOS — SISTEMA WEB COMPLETO DE RIFAS E APURAÇÃO
+# 🏍️ AÇÃO DOS AMIGOS — SISTEMA WEB COMPLETO DE RIFAS E APURAÇÃO
 
-Sistema web completo, profissional, responsivo (*mobile-first*) e pronto para produção para gestão e venda de **Ação Entre Amigos / Rifa com apuração auditável pela Loteria Federal**.
+Sistema web completo, profissional, responsivo (*mobile-first*) e pronto para produção para gestão e venda de **Ação dos Amigos / Rifa com apuração auditável pela Loteria Federal**.
 
 ---
 
@@ -129,4 +129,4 @@ npx tsx test/e2e-tests.ts
 ---
 
 ## 📄 Licença
-Projeto desenvolvido para a **Ação Entre Amigos da Motocicleta Honda CG 160 Start**. Todos os direitos reservados © 2026.
+Projeto desenvolvido para a **Ação dos Amigos da Motocicleta Honda CG 160 Start**. Todos os direitos reservados © 2026.

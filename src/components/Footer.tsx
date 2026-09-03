@@ -20,10 +20,10 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full overflow-hidden border border-primary-500/40 shadow-glow-primary shrink-0 bg-dark-950">
-                <img src="/images/logo-acao.jpg" alt="Ação Entre Amigos" className="w-full h-full object-cover" />
+                <img src="/images/logo-acao.jpg" alt="Ação dos Amigos" className="w-full h-full object-cover" />
               </div>
               <span className="font-heading font-black text-lg text-foreground tracking-tight uppercase">
-                AÇÃO ENTRE AMIGOS
+                AÇÃO DOS AMIGOS
               </span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
@@ -126,7 +126,7 @@ export default function Footer() {
         {/* Bottom Legal Disclaimer */}
         <div className="pt-6 sm:pt-8 border-t border-dark-800 text-center text-xs text-slate-400 space-y-2">
           <p className="max-w-3xl mx-auto leading-relaxed text-[11px]">
-            <strong>AVISO LEGAL:</strong> Esta Ação Entre Amigos é de caráter privado e voluntário. A extração da Loteria Federal é utilizada estritamente como referencial público e independente para apuração do resultado. A Caixa Econômica Federal não patrocina nem administra esta ação.
+            <strong>AVISO LEGAL:</strong> Esta Ação dos Amigos é de caráter privado e voluntário. A extração da Loteria Federal é utilizada estritamente como referencial público e independente para apuração do resultado. A Caixa Econômica Federal não patrocina nem administra esta ação.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 text-[11px] text-slate-400 pt-2 font-bold uppercase">
             <Link href="/termos" className="hover:text-foreground py-2 px-1">TERMOS DE PARTICIPAÇÃO</Link>
@@ -136,7 +136,7 @@ export default function Footer() {
             <Link href="/admin/login" className="hover:text-primary-400 py-2 px-1">ACESSO ADMINISTRATIVO</Link>
           </div>
           <p className="text-[10px] text-slate-400 pt-2 uppercase font-semibold">
-            &copy; 2026 AÇÃO ENTRE AMIGOS. TODOS OS DIREITOS RESERVADOS.
+            &copy; 2026 AÇÃO DOS AMIGOS. TODOS OS DIREITOS RESERVADOS.
           </p>
         </div>
 

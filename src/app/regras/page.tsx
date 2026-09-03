@@ -29,7 +29,7 @@ export default async function RegrasPage() {
           <span>REGULAMENTO & CRITÉRIOS DE APURAÇÃO</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-heading font-black text-foreground uppercase tracking-tight">
-          REGRAS DA AÇÃO ENTRE AMIGOS
+          REGRAS DA AÇÃO DOS AMIGOS
         </h1>
         <p className="text-xs sm:text-sm text-slate-400">
           Transparência total sobre a mecânica do sorteio, faixas de números, apuração pela Loteria Federal, bonificações e entrega do prêmio.
@@ -124,7 +124,7 @@ export default async function RegrasPage() {
           <span>INFORMAÇÃO SOBRE A REFERÊNCIA DA LOTERIA FEDERAL</span>
         </div>
         <p>
-          A extração da Loteria Federal é utilizada estritamente como referencial público, auditável e independente para a determinação do bilhete premiado. A Caixa Econômica Federal não organiza, patrocina, avaliza ou comercializa bilhetes desta Ação Entre Amigos.
+          A extração da Loteria Federal é utilizada estritamente como referencial público, auditável e independente para a determinação do bilhete premiado. A Caixa Econômica Federal não organiza, patrocina, avaliza ou comercializa bilhetes desta Ação dos Amigos.
         </p>
       </div>
 

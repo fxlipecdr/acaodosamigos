@@ -27,11 +27,11 @@ function formatField(id: string, value: string): string {
 
 export function generatePixPayload({
   key = "48992178109",
-  name = "ACAO ENTRE AMIGOS MOTO",
+  name = "ACAO DOS AMIGOS MOTO",
   city = "TUBARAO",
   amount,
   txid = "LDPG001",
-  description = "Acao Entre Amigos Moto",
+  description = "Acao dos Amigos Moto",
 }: {
   key?: string;
   name?: string;

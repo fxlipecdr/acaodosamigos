@@ -7,7 +7,7 @@ import { CART_VISIBILITY_EVENT } from "@/lib/uiEvents";
 
 export default function WhatsAppButton({
   phone = "5548992178109",
-  message = "Olá! Vim pelo site da ação entre amigos e gostaria de tirar uma dúvida.",
+  message = "Olá! Vim pelo site da Ação dos Amigos e gostaria de tirar uma dúvida.",
 }: {
   phone?: string;
   message?: string;

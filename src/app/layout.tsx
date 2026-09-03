@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
       where: { id: "default" },
     });
 
-    const title = settings?.title || "Ação Entre Amigos | Honda CG 160";
+    const title = settings?.title || "Ação dos Amigos | Honda CG 160";
     const description =
       settings?.subtitle ||
       "Concorra a uma Motocicleta Honda CG 160 com apuração pela Loteria Federal. Apenas R$ 30 por número ou 3 por R$ 63!";
@@ -45,11 +45,11 @@ export async function generateMetadata(): Promise<Metadata> {
         template: `%s | ${title}`,
       },
       description,
-      metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://acaoentreamigos.com"),
+      metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://acaodosamigos.com.br"),
       openGraph: {
         title,
         description,
-        siteName: "Ação Entre Amigos",
+        siteName: "Ação dos Amigos",
         type: "website",
         locale: "pt_BR",
         images: [
@@ -57,7 +57,7 @@ export async function generateMetadata(): Promise<Metadata> {
             url: "/images/banner-rifa.jpg",
             width: 1200,
             height: 630,
-            alt: "Ação Entre Amigos Honda CG 160 Start",
+            alt: "Ação dos Amigos Honda CG 160 Start",
           },
           {
             url: "/images/moto/moto-hero.jpg",
@@ -74,13 +74,22 @@ export async function generateMetadata(): Promise<Metadata> {
         images: ["/images/banner-rifa.jpg"],
       },
       icons: {
-        icon: "/favicon.ico",
+        icon: [
+          { url: "/favicon.ico" },
+          { url: "/favicon.png", type: "image/png" },
+          { url: "/images/logo-acao.jpg" },
+        ],
+        apple: "/apple-touch-icon.png",
+        shortcut: "/favicon.ico",
       },
     };
   } catch {
     return {
-      title: "Ação Entre Amigos | Honda CG 160 Start",
+      title: "Ação dos Amigos | Honda CG 160 Start",
       description: "Concorra a uma motocicleta Honda CG 160 Start com apuração transparente pela Loteria Federal. 3 cotas por R$ 63!",
+      icons: {
+        icon: "/favicon.ico",
+      },
     };
   }
 }
@@ -91,7 +100,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   let whatsappNumber = "+5548992178109";
-  let whatsappMessage = "Olá! Vim pelo site da ação entre amigos e gostaria de tirar uma dúvida.";
+  let whatsappMessage = "Olá! Vim pelo site da Ação dos Amigos e gostaria de tirar uma dúvida.";
 
   try {
     const settings = await db.campaignSettings.findUnique({

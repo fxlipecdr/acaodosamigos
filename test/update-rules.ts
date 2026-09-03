@@ -3,10 +3,10 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  const defaultRules = `REGULAMENTO OFICIAL - AÇÃO ENTRE AMIGOS
+  const defaultRules = `REGULAMENTO OFICIAL - AÇÃO DOS AMIGOS
 
 1. **DO OBJETIVO**
-A presente Ação Entre Amigos tem como finalidade a arrecadação de fundos através da cessão de bilhetes numerados, tendo como prêmio principal uma motocicleta Honda CG 160 Start descrita na página oficial.
+A presente Ação dos Amigos tem como finalidade a arrecadação de fundos através da cessão de bilhetes numerados, tendo como prêmio principal uma motocicleta Honda CG 160 Start descrita na página oficial.
 
 2. **DA PARTICIPAÇÃO E MODALIDADES DE VENDA**
 * O valor unitário de cada número é de **R$ 30,00 (trinta reais)**.

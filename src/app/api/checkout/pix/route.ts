@@ -166,7 +166,7 @@ export async function POST(request: Request) {
       const pixKey = (settings?.whatsappNumber || "48992178109").replace(/\D/g, "");
       const pixPayload = generatePixPayload({
         key: pixKey,
-        name: "ACAO ENTRE AMIGOS MOTO",
+        name: "ACAO DOS AMIGOS MOTO",
         city: "TUBARAO",
         amount: pricing.finalTotal,
         txid: orderCode.replace("-", ""),

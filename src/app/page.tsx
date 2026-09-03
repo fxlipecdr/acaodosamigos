@@ -95,7 +95,7 @@ export default async function HomePage() {
               <div className="inline-flex flex-wrap items-center justify-center lg:justify-start gap-2">
                 <span className="px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/30 text-primary-400 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
                   <Sparkles className="w-3.5 h-3.5" />
-                  AÇÃO ENTRE AMIGOS OFICIAL
+                  AÇÃO DOS AMIGOS OFICIAL
                 </span>
                 <span className="px-3 py-1 rounded-full bg-dark-800 border border-dark-700 text-slate-300 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5 text-primary-400" />
@@ -631,7 +631,7 @@ export default async function HomePage() {
 
           <div className="pt-2">
             <a
-              href={`https://wa.me/${(settings?.whatsappNumber || "5548992178109").replace(/\D/g, "")}?text=${encodeURIComponent(settings?.whatsappMessage || "Olá! Vim pelo site da ação entre amigos e gostaria de tirar uma dúvida.")}`}
+              href={`https://wa.me/${(settings?.whatsappNumber || "5548992178109").replace(/\D/g, "")}?text=${encodeURIComponent(settings?.whatsappMessage || "Olá! Vim pelo site da Ação dos Amigos e gostaria de tirar uma dúvida.")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 min-h-[56px] px-6 sm:px-8 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-white font-black text-xs uppercase tracking-wider shadow-xl shadow-emerald-500/30 active:scale-[0.98] transition-transform"

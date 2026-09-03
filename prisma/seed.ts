@@ -37,10 +37,10 @@ async function main() {
   console.log(`✓ Administrador configurado: ${admin.email}`);
 
   // 2. Regulamento Oficial
-  const defaultRules = `## REGULAMENTO OFICIAL DA AÇÃO ENTRE AMIGOS
+  const defaultRules = `## REGULAMENTO OFICIAL DA AÇÃO DOS AMIGOS
 
 1. **DO OBJETIVO**
-A presente Ação Entre Amigos tem como finalidade a arrecadação de fundos através da cessão de bilhetes numerados, tendo como prêmio principal uma motocicleta Honda CG 160 Start descrita na página oficial.
+A presente Ação dos Amigos tem como finalidade a arrecadação de fundos através da cessão de bilhetes numerados, tendo como prêmio principal uma motocicleta Honda CG 160 Start descrita na página oficial.
 
 2. **DA PARTICIPAÇÃO E MODALIDADES DE VENDA**
 * O valor unitário de cada número é de **R$ 30,00 (trinta reais)**.
@@ -86,7 +86,7 @@ A presente Ação Entre Amigos tem como finalidade a arrecadação de fundos atr
   const campaign = await prisma.campaignSettings.upsert({
     where: { id: "default" },
     update: {
-      title: "Ação Entre Amigos da Moto",
+      title: "Ação dos Amigos da Moto",
       subtitle: "Concorra a uma motocicleta Honda CG 160 Start com apuração transparente pela Loteria Federal!",
       drawDate: "2026-11-15",
       drawTime: "19:00",
@@ -102,9 +102,9 @@ A presente Ação Entre Amigos tem como finalidade a arrecadação de fundos atr
       onlineStart: 3000,
       onlineEnd: 3999,
       whatsappNumber: "+5548992178109",
-      whatsappMessage: "Olá! Vim pelo site da ação entre amigos e gostaria de tirar uma dúvida sobre a moto.",
+      whatsappMessage: "Olá! Vim pelo site da Ação dos Amigos e gostaria de tirar uma dúvida sobre a moto.",
       instagramUrl: "",
-      contactEmail: "contato@acaoentreamigos.com",
+      contactEmail: "contato@acaodosamigos.com.br",
       rulesText: defaultRules,
       prizeModel: "Honda CG 160 Start",
       prizeYear: "2023",
@@ -121,7 +121,7 @@ A presente Ação Entre Amigos tem como finalidade a arrecadação de fundos atr
     },
     create: {
       id: "default",
-      title: "Ação Entre Amigos da Moto",
+      title: "Ação dos Amigos da Moto",
       subtitle: "Concorra a uma motocicleta Honda CG 160 Start com apuração transparente pela Loteria Federal!",
       drawDate: "2026-11-15",
       drawTime: "19:00",
@@ -137,9 +137,9 @@ A presente Ação Entre Amigos tem como finalidade a arrecadação de fundos atr
       onlineStart: 3000,
       onlineEnd: 3999,
       whatsappNumber: "+5548992178109",
-      whatsappMessage: "Olá! Vim pelo site da ação entre amigos e gostaria de tirar uma dúvida sobre a moto.",
+      whatsappMessage: "Olá! Vim pelo site da Ação dos Amigos e gostaria de tirar uma dúvida sobre a moto.",
       instagramUrl: "",
-      contactEmail: "contato@acaoentreamigos.com",
+      contactEmail: "contato@acaodosamigos.com.br",
       rulesText: defaultRules,
       prizeModel: "Honda CG 160 Start",
       prizeYear: "2023",

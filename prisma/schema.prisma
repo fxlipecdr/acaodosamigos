@@ -26,8 +26,8 @@ model AdminUser {
 
 model CampaignSettings {
   id               String   @id @default("default")
-  title            String   @default("Ação Entre Amigos")
-  subtitle         String   @default("Concorra a uma Motocicleta 0km")
+  title            String   @default("Ação dos Amigos")
+  subtitle         String   @default("Concorra a uma Motocicleta Honda CG 160 Start")
   drawDate         String   @default("2026-11-15")
   drawTime         String   @default("19:00")
   drawNotice       String?
@@ -42,9 +42,9 @@ model CampaignSettings {
   onlineStart      Int      @default(3000)
   onlineEnd        Int      @default(3999)
   whatsappNumber   String   @default("+5548992178109")
-  whatsappMessage  String   @default("Olá! Vim pelo site da ação entre amigos e gostaria de tirar uma dúvida.")
+  whatsappMessage  String   @default("Olá! Vim pelo site da Ação dos Amigos e gostaria de tirar uma dúvida.")
   instagramUrl     String?
-  contactEmail     String   @default("suporte@acaoentreamigos.com")
+  contactEmail     String   @default("suporte@acaodosamigos.com.br")
   rulesText        String
   prizeModel       String   @default("Honda CG 160 Start")
   prizeYear        String   @default("2023")

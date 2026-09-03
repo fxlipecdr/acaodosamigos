@@ -53,7 +53,7 @@ export default function AdminLoginPage() {
             PAINEL ADMINISTRATIVO
           </h1>
           <p className="text-xs text-slate-400">
-            Acesso restrito para gestão e apuração da Ação Entre Amigos
+            Acesso restrito para gestão e apuração da Ação dos Amigos
           </p>
         </div>
 

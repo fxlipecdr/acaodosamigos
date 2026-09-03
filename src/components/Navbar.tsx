@@ -99,7 +99,7 @@ export default function Navbar() {
               </div>
 
               <span className="font-heading font-black text-[13px] sm:text-base xl:text-lg text-foreground tracking-tight uppercase leading-none truncate">
-                AÇÃO ENTRE AMIGOS
+                AÇÃO DOS AMIGOS
               </span>
             </Link>
 

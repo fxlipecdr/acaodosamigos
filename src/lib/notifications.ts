@@ -14,7 +14,7 @@ export interface PurchaseNotificationData {
  * Monta o texto padronizado do comprovante para o WhatsApp
  */
 export function formatPurchaseWhatsAppText(data: PurchaseNotificationData): string {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://acaoentreamigos.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://acaodosamigos.com.br";
   const formattedNumbers = data.numbers.sort((a, b) => a - b).join(", ");
   const formattedTotal = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -22,7 +22,7 @@ export function formatPurchaseWhatsAppText(data: PurchaseNotificationData): stri
   }).format(data.totalPaid);
 
   return (
-    `🏍️ *AÇÃO ENTRE AMIGOS — COMPROVANTE OFICIAL*\n\n` +
+    `🏍️ *AÇÃO DOS AMIGOS — COMPROVANTE OFICIAL*\n\n` +
     `Olá, *${data.participantName}*!\n` +
     `Seu pagamento Pix foi *confirmado com sucesso*!\n\n` +
     `📋 *Código do Pedido:* ${data.orderCode}\n` +
@@ -30,7 +30,7 @@ export function formatPurchaseWhatsAppText(data: PurchaseNotificationData): stri
     `🎟️ *Seus Números da Sorte:* ${formattedNumbers}\n\n` +
     `📅 *Sorteio:* 15/11/2026 (Apuração pela Loteria Federal)\n` +
     `🔍 *Consultar seus bilhetes a qualquer momento:* ${siteUrl}/meus-numeros\n\n` +
-    `_Boa sorte! Obrigado por apoiar esta ação entre amigos!_`
+    `_Boa sorte! Obrigado por apoiar esta Ação dos Amigos!_`
   );
 }
 

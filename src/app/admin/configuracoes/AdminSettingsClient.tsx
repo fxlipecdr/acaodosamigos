@@ -15,12 +15,12 @@ import {
 } from "lucide-react";
 
 export default function AdminSettingsClient({ settings }: { settings: any }) {
-  const [title, setTitle] = useState(settings?.title || "Ação Entre Amigos da Moto");
+  const [title, setTitle] = useState(settings?.title || "Ação dos Amigos da Moto");
   const [subtitle, setSubtitle] = useState(settings?.subtitle || "Concorra a uma motocicleta Honda CG 160 Start com apuração transparente pela Loteria Federal!");
   const [whatsappNumber, setWhatsappNumber] = useState(settings?.whatsappNumber || "+5548992178109");
-  const [whatsappMessage, setWhatsappMessage] = useState(settings?.whatsappMessage || "Olá! Vim pelo site da ação entre amigos.");
-  const [contactEmail, setContactEmail] = useState(settings?.contactEmail || "contato@acaoentreamigos.com");
-  const [instagramUrl, setInstagramUrl] = useState(settings?.instagramUrl || "https://instagram.com/acaoentreamigos");
+  const [whatsappMessage, setWhatsappMessage] = useState(settings?.whatsappMessage || "Olá! Vim pelo site da Ação dos Amigos.");
+  const [contactEmail, setContactEmail] = useState(settings?.contactEmail || "contato@acaodosamigos.com.br");
+  const [instagramUrl, setInstagramUrl] = useState(settings?.instagramUrl || "https://instagram.com/acaodosamigos");
 
   // Pricing & Promos
   const [unitPrice, setUnitPrice] = useState(String(settings?.unitPrice || 30.0));

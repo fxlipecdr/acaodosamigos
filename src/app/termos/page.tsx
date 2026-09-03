@@ -12,7 +12,7 @@ export default function TermosPage() {
         <section className="space-y-2">
           <h2 className="text-base font-bold text-foreground">1. Objeto</h2>
           <p>
-            O presente documento estabelece as regras e condições para aquisição de cotas/números da Ação Entre Amigos, cujo prêmio principal consiste em uma motocicleta Honda CG 160 Start semi-nova conforme anunciado na página principal.
+            O presente documento estabelece as regras e condições para aquisição de cotas/números da Ação dos Amigos, cujo prêmio principal consiste em uma motocicleta Honda CG 160 Start semi-nova conforme anunciado na página principal.
           </p>
         </section>
 

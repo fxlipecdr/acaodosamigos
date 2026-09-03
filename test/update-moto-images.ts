@@ -25,7 +25,7 @@ async function updatePrize() {
     },
     create: {
       id: "default",
-      title: "Ação Entre Amigos da Moto",
+      title: "Ação dos Amigos da Moto",
       subtitle: "Concorra a uma motocicleta Honda CG 160 Start com apuração transparente pela Loteria Federal!",
       prizeModel: "Honda CG 160 Start",
       prizeYear: "2023",
