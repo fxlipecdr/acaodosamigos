@@ -23,3 +23,9 @@ prisma/dev.db-journal
 Thumbs.db
 tsconfig.tsbuildinfo
 .claude/
+
+# Segredos locais
+.env
+.env.backup-*
+teste-turso.db
+*.tmp.ts

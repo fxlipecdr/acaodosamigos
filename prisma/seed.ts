@@ -1,10 +1,25 @@
 import { PrismaClient } from "@prisma/client";
+import { PrismaLibSQL } from "@prisma/adapter-libsql";
 import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient();
+// Mesma logica de src/lib/db.ts: com TURSO_DATABASE_URL definido, o seed
+// popula o banco remoto do Turso; sem ela, usa o SQLite local.
+function createPrismaClient(): PrismaClient {
+  const tursoUrl = process.env.TURSO_DATABASE_URL;
+  if (tursoUrl) {
+    const adapter = new PrismaLibSQL({
+      url: tursoUrl,
+      authToken: process.env.TURSO_AUTH_TOKEN,
+    });
+    return new PrismaClient({ adapter });
+  }
+  return new PrismaClient();
+}
+
+const prisma = createPrismaClient();
 
 async function main() {
-  console.log("Iniciando seed limpo do banco de dados...");
+  console.log("Iniciando seed idempotente do banco de dados...");
 
   // 1. Criar Usuário Administrador
   const adminPasswordHash = await bcrypt.hash("admin123", 10);
@@ -141,23 +156,34 @@ A presente Ação Entre Amigos tem como finalidade a arrecadação de fundos atr
   });
   console.log(`✓ Campanha configurada: ${campaign.title}`);
 
-  // 4. Limpar dados fictícios de testes (Parceiros fictícios, Compras fictícias, Participantes fictícios)
-  console.log("Limpando dados fictícios...");
-  await prisma.purchaseItem.deleteMany({});
-  await prisma.payment.deleteMany({});
-  await prisma.purchase.deleteMany({});
-  await prisma.raffleNumber.deleteMany({});
-  await prisma.partner.deleteMany({});
-  await prisma.participant.deleteMany({});
-  await prisma.auditLog.deleteMany({});
-  await prisma.verificationSession.deleteMany({});
-  console.log("✓ Tabelas limpas.");
+  // 4. Reset destrutivo — SOMENTE sob pedido explícito.
+  //    Este seed roda a cada build (veja o script "build" no package.json).
+  //    Apagar as tabelas aqui sem trava significaria perder todas as vendas
+  //    reais a cada deploy, então o reset agora exige SEED_RESET=true.
+  if (process.env.SEED_RESET === "true") {
+    console.log("⚠  SEED_RESET=true — apagando TODOS os dados transacionais...");
+    await prisma.purchaseItem.deleteMany({});
+    await prisma.payment.deleteMany({});
+    await prisma.purchase.deleteMany({});
+    await prisma.raffleNumber.deleteMany({});
+    await prisma.partner.deleteMany({});
+    await prisma.participant.deleteMany({});
+    await prisma.auditLog.deleteMany({});
+    await prisma.verificationSession.deleteMany({});
+    console.log("✓ Tabelas limpas.");
+  }
 
-  // 5. Gerar os 3.000 números limpos (todos AVAILABLE, 0 vendas fictícias)
-  console.log("Gerando os 3.000 números 100% disponíveis (1000 a 3999)...");
+  // 5. Garantir a existência dos 3.000 números (1000 a 3999).
+  //    Cria apenas os que faltam: um banco já em uso passa intacto, e um banco
+  //    novo recebe a faixa completa.
+  const existing = await prisma.raffleNumber.findMany({
+    select: { number: true },
+  });
+  const existingSet = new Set(existing.map((n) => n.number));
+
   const numbersBatch: any[] = [];
-
   for (let n = 1000; n <= 3999; n++) {
+    if (existingSet.has(n)) continue;
     const isPresencial = n <= 2999;
     numbersBatch.push({
       number: n,
@@ -171,14 +197,20 @@ A presente Ação Entre Amigos tem como finalidade a arrecadação de fundos atr
     });
   }
 
-  const chunkSize = 500;
-  for (let i = 0; i < numbersBatch.length; i += chunkSize) {
-    const chunk = numbersBatch.slice(i, i + chunkSize);
-    await prisma.raffleNumber.createMany({
-      data: chunk,
-    });
+  if (numbersBatch.length === 0) {
+    console.log(`✓ Os ${existingSet.size} números já existem — nada a criar.`);
+  } else {
+    console.log(`Criando ${numbersBatch.length} números faltantes...`);
+    const chunkSize = 500;
+    for (let i = 0; i < numbersBatch.length; i += chunkSize) {
+      // Sem skipDuplicates: o provider SQLite não o suporta, e a lista acima
+      // já exclui os números que existem.
+      await prisma.raffleNumber.createMany({
+        data: numbersBatch.slice(i, i + chunkSize),
+      });
+    }
+    console.log(`✓ ${numbersBatch.length} números criados como DISPONÍVEIS.`);
   }
-  console.log("✓ Todos os 3.000 números gerados como DISPONÍVEIS!");
 
   // 6. Configurar registro de sorteio agendado
   await prisma.drawResult.upsert({
@@ -200,7 +232,7 @@ A presente Ação Entre Amigos tem como finalidade a arrecadação de fundos atr
     },
   });
 
-  console.log("✓ Seed limpo concluído com sucesso!");
+  console.log("✓ Seed concluído com sucesso!");
 }
 
 main()

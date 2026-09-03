@@ -1,4 +1,11 @@
 datasource db {
+  // Turso é libSQL — dialeto SQLite, então o provider continua "sqlite".
+  // A conexão real com o Turso NÃO passa por esta url: ela é feita pelo
+  // driver adapter (@prisma/adapter-libsql) em src/lib/db.ts, usando
+  // TURSO_DATABASE_URL + TURSO_AUTH_TOKEN.
+  //
+  // Esta url serve só para o Prisma CLI ter um destino local válido ao
+  // gerar/validar o schema. O que roda em produção é o adapter.
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
