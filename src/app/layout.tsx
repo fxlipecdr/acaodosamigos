@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import BottomNav from "@/components/BottomNav";
 import db from "@/lib/db";
 
 const inter = Inter({
@@ -11,6 +12,21 @@ const inter = Inter({
   variable: "--font-inter",
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  // Permite zoom manual (acessibilidade) — o zoom automático em foco de input
+  // é evitado no CSS, garantindo 16px de fonte nos campos.
+  maximumScale: 5,
+  userScalable: true,
+  // Faz o conteúdo ir até as bordas do aparelho; as safe-areas cuidam do notch.
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#090d16" },
+    { media: "(prefers-color-scheme: light)", color: "#090d16" },
+  ],
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -86,11 +102,12 @@ export default async function RootLayout({
     <html lang="pt-BR" className={`${inter.variable} dark scroll-smooth`}>
       <body className="bg-background text-foreground font-sans min-h-screen flex flex-col selection:bg-primary-500 selection:text-black">
         <Navbar />
-        <main className="flex-1 w-full">
+        <main className="flex-1 w-full pb-bottomnav lg:pb-0">
           {children}
         </main>
         <Footer />
         <WhatsAppButton phone={whatsappNumber} message={whatsappMessage} />
+        <BottomNav />
       </body>
     </html>
   );

@@ -34,7 +34,7 @@ function ConfirmationContent() {
 
     const fetchOrder = async () => {
       try {
-        const res = await fetch(`/api/checkout/status?orderCode=${code}`);
+        const res = await fetch(`/api/checkout/status?code=${code}`);
         const data = await res.json();
         if (data.success) {
           setOrderData(data);
@@ -139,7 +139,7 @@ function ConfirmationContent() {
           <div className="flex justify-between py-1.5 border-b border-dark-800 print:border-gray-200">
             <span className="text-slate-400 print:text-gray-600">VALOR TOTAL PAGO:</span>
             <strong className="text-emerald-400 font-mono font-black text-sm print:text-black">
-              {formatCurrency(orderData.amount || 0)}
+              {formatCurrency(orderData.totalPaid ?? 0)}
             </strong>
           </div>
 

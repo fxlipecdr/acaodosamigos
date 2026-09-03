@@ -109,15 +109,15 @@ export default function MeusNumerosPage() {
   };
 
   return (
-    <div className="min-h-screen py-8 sm:py-16 max-w-3xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen py-6 sm:py-16 max-w-3xl mx-auto px-4 sm:px-6">
       
       {/* Header */}
-      <div className="text-center max-w-xl mx-auto space-y-2 mb-8">
+      <div className="text-center max-w-xl mx-auto space-y-2 mb-6 sm:mb-8">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/30 text-primary-400 text-xs font-bold uppercase tracking-wider">
           <Search className="w-3.5 h-3.5" />
           <span>ÁREA DO PARTICIPANTE</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-heading font-black text-foreground uppercase tracking-tight">
+        <h1 className="text-xl sm:text-3xl font-heading font-black text-foreground uppercase tracking-tight">
           CONSULTAR MEUS NÚMEROS
         </h1>
         <p className="text-xs sm:text-sm text-slate-400">
@@ -134,7 +134,7 @@ export default function MeusNumerosPage() {
 
       {step === "cpf" && (
         /* ETAPA 1: DIGITAR CPF */
-        <div className="max-w-md mx-auto p-6 sm:p-8 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card space-y-6">
+        <div className="max-w-md mx-auto p-5 sm:p-8 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card space-y-5 sm:space-y-6">
           <form onSubmit={handleRequestOtp} className="space-y-4">
             <div className="space-y-1.5">
               <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
@@ -143,17 +143,21 @@ export default function MeusNumerosPage() {
               <input
                 type="text"
                 required
+                inputMode="numeric"
+                pattern="[0-9.\-]*"
+                enterKeyHint="go"
+                autoComplete="off"
                 placeholder="000.000.000-00"
                 value={cpf}
                 onChange={(e) => handleCpfChange(e.target.value)}
-                className="w-full px-4 py-3 bg-dark-900 border border-dark-700 rounded-xl text-base text-foreground placeholder:text-slate-500 focus:outline-none focus:border-primary-500 font-mono"
+                className="w-full h-12 px-4 bg-dark-900 border border-dark-700 rounded-xl text-base text-foreground placeholder:text-slate-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 font-mono tracking-wide"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-primary-500 hover:bg-primary-400 text-dark-900 font-black text-xs uppercase tracking-wider shadow-glow-primary active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full h-14 rounded-2xl bg-primary-500 hover:bg-primary-400 text-dark-900 font-black text-sm uppercase tracking-wider shadow-glow-primary active:scale-[0.98] transition-transform flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <>
@@ -209,17 +213,21 @@ export default function MeusNumerosPage() {
                 type="text"
                 maxLength={6}
                 required
+                inputMode="numeric"
+                pattern="[0-9]*"
+                autoComplete="one-time-code"
+                enterKeyHint="go"
                 placeholder="000000"
                 value={otpCode}
                 onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ""))}
-                className="w-full py-3 bg-dark-900 border border-dark-700 rounded-xl text-2xl font-mono font-black text-center text-primary-400 tracking-widest focus:outline-none focus:border-primary-500"
+                className="w-full h-16 bg-dark-900 border border-dark-700 rounded-xl text-3xl font-mono font-black text-center text-primary-400 tracking-[0.3em] focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-dark-900 font-black text-xs uppercase tracking-wider shadow-glow-emerald active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full h-14 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-dark-900 font-black text-sm uppercase tracking-wider shadow-glow-emerald active:scale-[0.98] transition-transform flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <>
@@ -251,7 +259,7 @@ export default function MeusNumerosPage() {
         <div className="space-y-6 animate-in fade-in">
           
           {/* Header Card */}
-          <div className="p-6 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-4 sm:p-6 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
             <div>
               <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">PARTICIPANTE</span>
               <h3 className="text-xl font-heading font-black text-foreground uppercase tracking-tight mt-0.5">{resultData.participant.maskedName}</h3>
@@ -267,7 +275,7 @@ export default function MeusNumerosPage() {
           </div>
 
           {/* Sorteio Info Card */}
-          <div className="p-4 rounded-xl bg-gradient-to-r from-primary-950/40 to-dark-850 border border-primary-500/30 flex items-center justify-between text-xs font-bold uppercase tracking-wider">
+          <div className="p-4 rounded-xl bg-gradient-to-r from-primary-950/40 to-dark-850 border border-primary-500/30 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs font-bold uppercase tracking-wider">
             <div className="flex items-center gap-2 text-slate-300">
               <Calendar className="w-4 h-4 text-primary-400" />
               <span>SORTEIO: <strong className="text-foreground">15/11/2026</strong> (LOTERIA FEDERAL)</span>
@@ -276,13 +284,13 @@ export default function MeusNumerosPage() {
           </div>
 
           {/* Numbers Grid */}
-          <div className="p-6 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card space-y-4">
+          <div className="p-4 sm:p-6 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card space-y-4">
             <h4 className="font-heading font-black text-xs text-foreground uppercase tracking-wider flex items-center gap-2">
               <Ticket className="w-4 h-4 text-primary-400" />
               SEUS NÚMEROS ATIVOS
             </h4>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 sm:gap-3">
               {resultData.tickets.map((t: any) => (
                 <div
                   key={t.number}

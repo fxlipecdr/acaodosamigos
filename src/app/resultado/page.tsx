@@ -35,7 +35,7 @@ export default async function ResultadoPage() {
   const isPendingNewDate = drawResult?.status === "PENDING_NEW_DATE";
 
   return (
-    <div className="min-h-screen py-8 sm:py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <div className="min-h-screen py-6 sm:py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
       
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
@@ -43,7 +43,7 @@ export default async function ResultadoPage() {
           <Trophy className="w-3.5 h-3.5" />
           <span>APURAÇÃO & GANHADOR</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-heading font-black text-foreground uppercase tracking-tight">
+        <h1 className="text-2xl sm:text-4xl font-heading font-black text-foreground uppercase tracking-tight leading-tight">
           RESULTADO OFICIAL DA AÇÃO
         </h1>
         <p className="text-xs sm:text-sm text-slate-400">
@@ -53,10 +53,10 @@ export default async function ResultadoPage() {
 
       {isCompleted ? (
         /* ESTADO 1: SORTEIO REALIZADO COM GANHADOR */
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-emerald-950/40 via-dark-850 to-primary-950/40 border-2 border-emerald-500/50 shadow-glow-emerald space-y-8 text-center animate-in zoom-in-95">
+        <div className="p-5 sm:p-12 rounded-3xl bg-gradient-to-br from-emerald-950/40 via-dark-850 to-primary-950/40 border-2 border-emerald-500/50 shadow-glow-emerald space-y-6 sm:space-y-8 text-center">
           
-          <div className="w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto shadow-glow-emerald">
-            <Trophy className="w-12 h-12" />
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto shadow-glow-emerald">
+            <Trophy className="w-9 h-9 sm:w-12 sm:h-12" />
           </div>
 
           <div className="space-y-2">

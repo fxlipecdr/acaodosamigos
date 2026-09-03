@@ -1,5 +1,6 @@
 import db from "@/lib/db";
 import LotteryVisualizer from "@/components/LotteryVisualizer";
+import ExpandableText from "@/components/ExpandableText";
 import { FileText, Calendar, ShieldCheck, Scale, AlertTriangle, CheckCircle2, Award, Store } from "lucide-react";
 
 export const revalidate = 0;
@@ -45,7 +46,7 @@ export default async function RegrasPage() {
             <span className="text-[11px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
               INCENTIVO PARA ESTABELECIMENTOS PARCEIROS
             </span>
-            <h3 className="text-lg sm:text-xl font-heading font-black text-foreground uppercase tracking-tight mt-1">
+            <h3 className="text-base sm:text-xl font-heading font-black text-foreground uppercase tracking-tight mt-1 leading-snug">
               BONIFICAÇÃO DE R$ 500,00 PARA OS 4 PRIMEIROS PDVS
             </h3>
           </div>
@@ -104,14 +105,16 @@ export default async function RegrasPage() {
       <LotteryVisualizer />
 
       {/* Full Regulation Text from DB */}
-      <div className="p-6 sm:p-10 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card space-y-6">
-        <h3 className="text-xl font-heading font-black text-foreground uppercase tracking-tight border-b border-dark-750 pb-4">
+      <div className="p-5 sm:p-10 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card space-y-5 sm:space-y-6">
+        <h3 className="text-lg sm:text-xl font-heading font-black text-foreground uppercase tracking-tight border-b border-dark-750 pb-4">
           REGULAMENTO COMPLETO DA AÇÃO
         </h3>
 
-        <div className="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line font-sans space-y-4">
-          {settings?.rulesText || "Regulamento em elaboração."}
-        </div>
+        <ExpandableText>
+          <div className="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line font-sans space-y-4">
+            {settings?.rulesText || "Regulamento em elaboração."}
+          </div>
+        </ExpandableText>
       </div>
 
       {/* Legal & Regulatory Disclaimer Card */}

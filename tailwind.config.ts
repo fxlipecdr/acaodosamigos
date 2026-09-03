@@ -36,6 +36,9 @@ const config: Config = {
           700: "#047857",
         },
         dark: {
+          // Tom mais escuro que o fundo da página: usado em véus sobre imagem,
+          // trilhos de barra de progresso e campos "afundados".
+          950: "#04060b",
           900: "#090d16",
           850: "#0d131f",
           800: "#111827",

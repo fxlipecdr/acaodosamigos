@@ -67,10 +67,10 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="space-y-16 sm:space-y-24 pb-12">
+    <div className="space-y-10 sm:space-y-24 pb-8 sm:pb-12">
       
       {/* 1. HERO SECTION */}
-      <section className="relative pt-6 sm:pt-10 overflow-hidden">
+      <section className="relative pt-4 sm:pt-10 overflow-hidden">
         {/* Background Radial Glow */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
@@ -86,10 +86,10 @@ export default async function HomePage() {
             </div>
           )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center">
             
             {/* Left Content (7 cols) */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+            <div className="lg:col-span-7 space-y-4 sm:space-y-6 text-center lg:text-left">
               
               {/* Badges */}
               <div className="inline-flex flex-wrap items-center justify-center lg:justify-start gap-2">
@@ -104,14 +104,14 @@ export default async function HomePage() {
               </div>
 
               {/* Headline */}
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black text-foreground tracking-tight leading-[1.1] uppercase">
+              <h1 className="text-[28px] sm:text-5xl lg:text-6xl font-heading font-black text-foreground tracking-tight leading-[1.08] uppercase">
                 CONCORRA A ESTA <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-amber-300 to-primary-500">
                   HONDA CG 160 START
                 </span>
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+              <p className="text-sm sm:text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
                 {settings?.subtitle || "Escolha seus números da sorte e participe. Apuração 100% transparente com base nos resultados da Loteria Federal!"}
               </p>
 
@@ -149,7 +149,7 @@ export default async function HomePage() {
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
                 <Link
                   href="/numeros"
-                  className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-400 hover:to-primary-500 text-dark-900 font-black text-xs uppercase tracking-wider shadow-glow-primary hover:shadow-xl active:scale-95 transition-all text-center flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto h-14 px-8 rounded-2xl bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-400 hover:to-primary-500 text-dark-900 font-black text-sm sm:text-xs uppercase tracking-wider shadow-glow-primary active:scale-[0.98] transition-transform text-center flex items-center justify-center gap-2"
                 >
                   <Ticket className="w-4 h-4" />
                   <span>ESCOLHER MEUS NÚMEROS</span>
@@ -157,7 +157,7 @@ export default async function HomePage() {
 
                 <Link
                   href="/pontos-de-venda"
-                  className="w-full sm:w-auto px-6 py-4 rounded-xl bg-dark-800 hover:bg-dark-750 text-slate-200 border border-dark-700 font-bold text-xs uppercase tracking-wider hover:border-dark-600 transition-all text-center flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto h-14 px-6 rounded-2xl bg-dark-800 hover:bg-dark-750 text-slate-200 border border-dark-700 font-bold text-xs uppercase tracking-wider transition-colors text-center flex items-center justify-center gap-2"
                 >
                   <MapPin className="w-4 h-4 text-primary-400" />
                   <span>PONTOS DE VENDA</span>
@@ -165,7 +165,7 @@ export default async function HomePage() {
 
                 <Link
                   href="/regras"
-                  className="w-full sm:w-auto px-5 py-4 rounded-xl bg-transparent hover:bg-dark-800 text-slate-400 hover:text-foreground font-bold text-xs uppercase tracking-wider transition-colors text-center"
+                  className="w-full sm:w-auto h-12 px-5 rounded-2xl bg-transparent hover:bg-dark-800 text-slate-400 hover:text-foreground font-bold text-xs uppercase tracking-wider transition-colors text-center flex items-center justify-center"
                 >
                   VER REGRAS
                 </Link>
@@ -192,7 +192,7 @@ export default async function HomePage() {
             {/* Right Hero Image (5 cols) */}
             <div className="lg:col-span-5 relative">
               <div className="relative w-full rounded-2xl overflow-hidden border border-dark-700 bg-dark-850 p-2 shadow-2xl group">
-                <div className="relative h-[300px] sm:h-[380px] lg:h-[420px] w-full rounded-xl overflow-hidden bg-gradient-to-b from-dark-900 via-dark-850 to-dark-900 flex items-center justify-center p-2 sm:p-4">
+                <div className="relative h-[240px] sm:h-[380px] lg:h-[420px] w-full rounded-xl overflow-hidden bg-gradient-to-b from-dark-900 via-dark-850 to-dark-900 flex items-center justify-center p-2 sm:p-4">
                   <img
                     src={settings?.prizeCoverImage || "/images/moto/moto-hero.jpg"}
                     alt="Motocicleta Honda CG 160 Start"
@@ -226,37 +226,41 @@ export default async function HomePage() {
       {/* 2. BANNER PROMOCIONAL / ARTE DA AÇÃO */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative rounded-3xl overflow-hidden border border-primary-500/40 shadow-2xl bg-dark-850 group">
-          <div className="relative h-44 sm:h-56 lg:h-60 w-full overflow-hidden">
+          {/* Imagem como camada de fundo: o texto fica em fluxo normal, então a
+              altura do bloco acompanha o conteúdo em vez de recortá-lo. */}
+          <div className="absolute inset-0" aria-hidden>
             <img
               src="/images/banner-rifa.jpg"
-              alt="Ação Entre Amigos Bilhetes Premiados"
+              alt=""
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-dark-950/95 via-dark-950/75 to-dark-950/40" />
+            {/* No celular o texto ocupa a largura toda, então o véu é uniforme;
+                a partir de sm volta a abrir para a direita e revelar a arte. */}
+            <div className="absolute inset-0 bg-dark-950/90 sm:bg-gradient-to-r sm:from-dark-950/95 sm:via-dark-950/75 sm:to-dark-950/40" />
+          </div>
 
-            <div className="absolute inset-0 p-6 sm:p-10 flex flex-col justify-center max-w-2xl space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/20 border border-primary-500/40 text-primary-300 text-xs font-black uppercase tracking-wider w-fit">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>BILHETES DA SORTE COM RESULTADO AUDITÁVEL</span>
-              </div>
-              
-              <h3 className="text-xl sm:text-3xl font-heading font-black text-foreground uppercase tracking-tight">
-                ESCOLHA SEUS NÚMEROS E PARTICIPE
-              </h3>
-              
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-lg">
-                Garanta suas cotas online agora com desconto especial por pacote e confirmação instantânea no Pix.
-              </p>
+          <div className="relative p-5 sm:p-10 sm:min-h-56 lg:min-h-60 flex flex-col justify-center max-w-2xl space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-500/20 border border-primary-500/40 text-primary-300 text-[10px] sm:text-xs font-black uppercase tracking-wider w-fit">
+              <Sparkles className="w-3.5 h-3.5 shrink-0" />
+              <span>BILHETES DA SORTE COM RESULTADO AUDITÁVEL</span>
+            </div>
 
-              <div className="pt-1">
-                <Link
-                  href="/numeros"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-500 hover:bg-primary-400 text-dark-900 font-black text-xs uppercase tracking-wider shadow-glow-primary transition-all"
-                >
-                  <Ticket className="w-4 h-4" />
-                  <span>GARANTIR COTAS ONLINE</span>
-                </Link>
-              </div>
+            <h3 className="text-xl sm:text-3xl font-heading font-black text-foreground uppercase tracking-tight leading-tight">
+              ESCOLHA SEUS NÚMEROS E PARTICIPE
+            </h3>
+
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-lg">
+              Garanta suas cotas online agora com desconto especial por pacote e confirmação instantânea no Pix.
+            </p>
+
+            <div className="pt-1">
+              <Link
+                href="/numeros"
+                className="w-full sm:w-auto h-12 sm:h-auto inline-flex items-center justify-center gap-2 px-6 sm:py-3 rounded-xl bg-primary-500 hover:bg-primary-400 text-dark-900 font-black text-xs uppercase tracking-wider shadow-glow-primary active:scale-[0.98] transition-transform"
+              >
+                <Ticket className="w-4 h-4 shrink-0" />
+                <span>GARANTIR COTAS ONLINE</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -264,11 +268,11 @@ export default async function HomePage() {
 
       {/* 3. COMO PARTICIPAR? (ONLINE VS PRESENCIAL) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-8">
+        <div className="text-center max-w-2xl mx-auto mb-5 sm:mb-8">
           <span className="text-xs font-bold text-primary-400 uppercase tracking-widest">
             DUAS FORMAS DE CONCORRER
           </span>
-          <h2 className="text-2xl sm:text-3xl font-heading font-black text-foreground mt-1 uppercase tracking-tight">
+          <h2 className="text-xl sm:text-3xl font-heading font-black text-foreground mt-1 uppercase tracking-tight">
             COMO VOCÊ PREFERE PARTICIPAR?
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 mt-2">
@@ -276,10 +280,10 @@ export default async function HomePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           
           {/* Card 1: Comprar pelo Site (Online) */}
-          <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-dark-850 via-dark-850 to-primary-950/20 border-2 border-primary-500/40 relative overflow-hidden shadow-premium-card flex flex-col justify-between">
+          <div className="p-5 sm:p-8 rounded-2xl bg-gradient-to-br from-dark-850 via-dark-850 to-primary-950/20 border-2 border-primary-500/40 relative overflow-hidden shadow-premium-card flex flex-col justify-between">
             <div className="absolute top-0 right-0 bg-primary-500 text-dark-900 text-[10px] font-black uppercase px-3 py-1 rounded-bl-xl tracking-wider">
               MAIS RÁPIDO & PROMOÇÃO
             </div>
@@ -318,7 +322,7 @@ export default async function HomePage() {
           </div>
 
           {/* Card 2: Comprar Presencialmente (Pontos Físicos) */}
-          <div className="p-6 sm:p-8 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card flex flex-col justify-between">
+          <div className="p-5 sm:p-8 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card flex flex-col justify-between">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-xl bg-dark-800 border border-dark-700 flex items-center justify-center text-slate-300">
                 <Store className="w-6 h-6" />
@@ -357,18 +361,18 @@ export default async function HomePage() {
 
       {/* 4. COMO FUNCIONA (4 PASSOS) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-10">
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10">
           <span className="text-xs font-bold text-primary-400 uppercase tracking-widest">
             PASSO A PASSO
           </span>
-          <h2 className="text-2xl sm:text-3xl font-heading font-black text-foreground mt-1 uppercase tracking-tight">
+          <h2 className="text-xl sm:text-3xl font-heading font-black text-foreground mt-1 uppercase tracking-tight">
             COMO FUNCIONA A AÇÃO?
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           
-          <div className="p-5 rounded-2xl bg-dark-850 border border-dark-750 space-y-3">
+          <div className="p-4 sm:p-5 rounded-2xl bg-dark-850 border border-dark-750 space-y-2.5 sm:space-y-3">
             <span className="w-8 h-8 rounded-xl bg-primary-500/20 text-primary-400 font-black text-sm flex items-center justify-center border border-primary-500/30">
               1
             </span>
@@ -378,7 +382,7 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-dark-850 border border-dark-750 space-y-3">
+          <div className="p-4 sm:p-5 rounded-2xl bg-dark-850 border border-dark-750 space-y-2.5 sm:space-y-3">
             <span className="w-8 h-8 rounded-xl bg-primary-500/20 text-primary-400 font-black text-sm flex items-center justify-center border border-primary-500/30">
               2
             </span>
@@ -388,7 +392,7 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-dark-850 border border-dark-750 space-y-3">
+          <div className="p-4 sm:p-5 rounded-2xl bg-dark-850 border border-dark-750 space-y-2.5 sm:space-y-3">
             <span className="w-8 h-8 rounded-xl bg-primary-500/20 text-primary-400 font-black text-sm flex items-center justify-center border border-primary-500/30">
               3
             </span>
@@ -398,7 +402,7 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-dark-850 border border-dark-750 space-y-3">
+          <div className="p-4 sm:p-5 rounded-2xl bg-dark-850 border border-dark-750 space-y-2.5 sm:space-y-3">
             <span className="w-8 h-8 rounded-xl bg-primary-500/20 text-primary-400 font-black text-sm flex items-center justify-center border border-primary-500/30">
               4
             </span>
@@ -417,7 +421,7 @@ export default async function HomePage() {
           <span className="text-xs font-bold text-primary-400 uppercase tracking-widest">
             PRÊMIO PRINCIPAL
           </span>
-          <h2 className="text-2xl sm:text-3xl font-heading font-black text-foreground mt-1 uppercase tracking-tight">
+          <h2 className="text-xl sm:text-3xl font-heading font-black text-foreground mt-1 uppercase tracking-tight">
             SOBRE A MOTOCICLETA DO PRÊMIO
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 mt-2">
@@ -461,7 +465,7 @@ export default async function HomePage() {
             <span className="text-xs font-bold text-primary-400 uppercase tracking-widest">
               COMPRE PERTO DE VOCÊ
             </span>
-            <h2 className="text-2xl sm:text-3xl font-heading font-black text-foreground mt-1 uppercase tracking-tight">
+            <h2 className="text-xl sm:text-3xl font-heading font-black text-foreground mt-1 uppercase tracking-tight">
               PONTOS DE VENDA PRESENCIAIS
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
@@ -479,7 +483,7 @@ export default async function HomePage() {
         </div>
 
         {partnersSample.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {partnersSample.map((partner) => (
               <div
                 key={partner.id}
@@ -534,7 +538,7 @@ export default async function HomePage() {
 
       {/* 9. BOX RESUMIDO DAS REGRAS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-6 sm:p-8 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card">
+        <div className="p-5 sm:p-8 rounded-2xl bg-dark-850 border border-dark-700 shadow-premium-card">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-dark-750">
             <div>
               <span className="text-xs font-bold text-primary-400 uppercase tracking-widest">
@@ -554,7 +558,7 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6 text-xs text-slate-300">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-4 pt-5 sm:pt-6 text-xs text-slate-300">
             <div className="space-y-1">
               <strong className="text-foreground block uppercase font-bold tracking-wider">FAIXA DE NÚMEROS:</strong>
               <p className="text-slate-400">{settings?.startNumber || 1000} a {settings?.endNumber || 3999} (Total: 3.000)</p>
@@ -605,7 +609,7 @@ export default async function HomePage() {
 
       {/* 10. PRECISA DE AJUDA? / CONTATO */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-6 sm:p-10 rounded-2xl bg-gradient-to-br from-dark-850 via-dark-850 to-emerald-950/20 border border-emerald-500/30 text-center space-y-4 shadow-glow-emerald">
+        <div className="p-5 sm:p-10 rounded-2xl bg-gradient-to-br from-dark-850 via-dark-850 to-emerald-950/20 border border-emerald-500/30 text-center space-y-3.5 sm:space-y-4 shadow-glow-emerald">
           <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto">
             <MessageCircle className="w-6 h-6" />
           </div>
@@ -622,7 +626,7 @@ export default async function HomePage() {
               href={`https://wa.me/${(settings?.whatsappNumber || "5548992178109").replace(/\D/g, "")}?text=${encodeURIComponent(settings?.whatsappMessage || "Olá! Vim pelo site da ação entre amigos e gostaria de tirar uma dúvida.")}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white font-black text-xs uppercase tracking-wider shadow-xl shadow-emerald-500/30 active:scale-95 transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 min-h-[56px] px-6 sm:px-8 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-white font-black text-xs uppercase tracking-wider shadow-xl shadow-emerald-500/30 active:scale-[0.98] transition-transform"
             >
               <MessageCircle className="w-5 h-5 fill-current" />
               <span>FALAR PELO WHATSAPP: {settings?.whatsappNumber || "+55 48 99217-8109"}</span>

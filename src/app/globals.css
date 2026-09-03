@@ -5,15 +5,126 @@
 @layer base {
   :root {
     --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
+
+    /* Safe areas (iPhone notch / home indicator / Android gesture bar) */
+    --sat: env(safe-area-inset-top, 0px);
+    --sar: env(safe-area-inset-right, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+    --sal: env(safe-area-inset-left, 0px);
+
+    /* Alturas das barras fixas — usadas para reservar espaço no conteúdo */
+    --header-h: 3.5rem;   /* 56px no mobile */
+    --bottomnav-h: 4rem;  /* 64px no mobile */
+  }
+
+  @screen lg {
+    :root {
+      --header-h: 5rem;
+      --bottomnav-h: 0px;
+    }
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Evita "puxar para atualizar" acidental dentro de listas longas */
+    overscroll-behavior-y: none;
   }
 
   body {
     @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary-500 selection:text-black;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    /* Nenhum elemento deve gerar scroll lateral no mobile */
+    overflow-x: hidden;
+    /* Toque responsivo: sem flash cinza do Android e sem delay de 300ms */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* iOS dá zoom em qualquer input com fonte < 16px. Trava em 16px no mobile
+     e devolve o tamanho de design a partir de sm. */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+  @screen sm {
+    input,
+    select,
+    textarea {
+      font-size: inherit;
+    }
+  }
+
+  /* Foco visível apenas para navegação por teclado */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary-500/70 ring-offset-2 ring-offset-dark-900;
   }
 }
 
-/* Custom Scrollbars */
+@layer utilities {
+  /* --- Safe area helpers --- */
+  .pb-safe {
+    padding-bottom: var(--sab);
+  }
+  .pt-safe {
+    padding-top: var(--sat);
+  }
+  .mb-safe {
+    margin-bottom: var(--sab);
+  }
+  .inset-safe-x {
+    padding-left: var(--sal);
+    padding-right: var(--sar);
+  }
+
+  /* Espaço para não ficar embaixo da bottom nav / cart bar no mobile */
+  .pb-bottomnav {
+    padding-bottom: calc(var(--bottomnav-h) + var(--sab) + 1rem);
+  }
+
+  /* --- Toque --- */
+  /* Alvo mínimo de 44x44 (WCAG 2.5.5 / HIG da Apple) */
+  .tap-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .no-tap-highlight {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* --- Scroll horizontal com snap (carrosséis mobile) --- */
+  .snap-x-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .snap-x-carousel::-webkit-scrollbar {
+    display: none;
+  }
+  .snap-item {
+    scroll-snap-align: center;
+    flex: 0 0 auto;
+  }
+
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Rolagem com inércia dentro de painéis */
+  .momentum-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Custom Scrollbars (desktop) */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -29,7 +140,7 @@
   background: #334155;
 }
 
-/* Number ticket hover effect */
+/* Number ticket press feedback */
 .ticket-btn {
   transition: all 0.15s ease-in-out;
 }
@@ -42,4 +153,80 @@
   background: rgba(17, 24, 39, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+}
+
+/* --- Animações usadas nas folhas/menus mobile --- */
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.animate-sheet-up {
+  animation: sheet-up 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+@keyframes drawer-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-drawer-in {
+  animation: drawer-in 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Skeleton de carregamento */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: #161f30;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  animation: shimmer 1.6s infinite;
+}
+
+/* Respeita quem pediu menos movimento no sistema */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

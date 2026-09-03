@@ -78,19 +78,19 @@ export default function PointsOfSaleClient({
   }, [filteredPartners]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5 sm:space-y-8">
       
       {/* Partner Incentive Banner */}
-      <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-dark-850 to-primary-950/30 border-2 border-emerald-500/40 shadow-glow-emerald flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center shrink-0 shadow-md">
-            <Award className="w-6 h-6" />
+      <div className="p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-dark-850 to-primary-950/30 border-2 border-emerald-500/40 shadow-glow-emerald flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center shrink-0 shadow-md">
+            <Award className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div>
             <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
               CAMPANHA DE INCENTIVO AOS PARCEIROS
             </span>
-            <h3 className="text-base sm:text-lg font-heading font-black text-foreground uppercase tracking-tight mt-0.5">
+            <h3 className="text-sm sm:text-lg font-heading font-black text-foreground uppercase tracking-tight mt-1 leading-snug">
               BONIFICAÇÃO DE R$ 500,00 PARA OS 4 PRIMEIROS PDVS
             </h3>
             <p className="text-xs text-slate-300 mt-0.5">
@@ -101,25 +101,27 @@ export default function PointsOfSaleClient({
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="bg-dark-850 p-4 sm:p-6 rounded-2xl border border-dark-750 space-y-4 shadow-premium-card">
+      <div className="sticky z-30 -mx-4 sm:mx-0 px-4 sm:px-6 py-3 sm:py-6 bg-background/95 sm:bg-dark-850 backdrop-blur-md sm:rounded-2xl sm:border sm:border-dark-750 border-b border-dark-800 sm:border-b space-y-3 sm:space-y-4 sm:shadow-premium-card" style={{ top: "calc(var(--sat) + 3.5rem)" }}>
         
         {/* Search Input */}
         <div className="relative w-full">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
           <input
             type="text"
-            placeholder="Procure pelo nome do estabelecimento ou bairro..."
+            placeholder="Buscar estabelecimento ou bairro"
+            enterKeyHint="search"
+            autoCapitalize="none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-dark-900 border border-dark-700 rounded-xl text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-primary-500"
+            className="w-full h-12 pl-12 pr-4 bg-dark-900 border border-dark-700 rounded-xl text-base sm:text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-primary-500"
           />
         </div>
 
         {/* Neighborhood Filter Chips */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1">
+        <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar -mx-1 px-1 pb-1">
           <button
             onClick={() => setSelectedNeighborhood("ALL")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+            className={`shrink-0 h-10 px-3.5 rounded-full text-[11px] font-black uppercase tracking-wider whitespace-nowrap transition-colors active:scale-95 ${
               selectedNeighborhood === "ALL"
                 ? "bg-primary-500 text-dark-900 shadow-glow-primary"
                 : "bg-dark-900 text-slate-400 hover:text-foreground border border-dark-700"
@@ -132,7 +134,7 @@ export default function PointsOfSaleClient({
             <button
               key={bairro}
               onClick={() => setSelectedNeighborhood(bairro)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+              className={`shrink-0 h-10 px-3.5 rounded-full text-[11px] font-black uppercase tracking-wider whitespace-nowrap transition-colors active:scale-95 ${
                 selectedNeighborhood === bairro
                   ? "bg-primary-500 text-dark-900 shadow-glow-primary"
                   : "bg-dark-900 text-slate-400 hover:text-foreground border border-dark-700"
@@ -180,7 +182,7 @@ export default function PointsOfSaleClient({
               {/* Section Bairro Header */}
               <div className="flex items-center gap-2.5 pb-2 border-b border-dark-750">
                 <span className="w-3 h-3 rounded-full bg-primary-500 inline-block shadow-glow-primary" />
-                <h2 className="text-xl font-heading font-black text-foreground uppercase tracking-tight">
+                <h2 className="text-base sm:text-xl font-heading font-black text-foreground uppercase tracking-tight">
                   BAIRRO {neighborhood}
                 </h2>
                 <span className="text-xs text-slate-500 font-bold uppercase">
@@ -189,11 +191,11 @@ export default function PointsOfSaleClient({
               </div>
 
               {/* Grid of Partners */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {partners.map((partner) => (
                   <div
                     key={partner.id}
-                    className="p-5 rounded-2xl bg-dark-850 border border-dark-750 flex flex-col justify-between space-y-4 hover:border-dark-600 transition-all shadow-premium-card"
+                    className="p-4 sm:p-5 rounded-2xl bg-dark-850 border border-dark-750 flex flex-col justify-between space-y-3.5 hover:border-dark-600 transition-colors shadow-premium-card"
                   >
                     <div className="space-y-2.5">
                       <div className="flex items-start justify-between gap-2">
@@ -236,7 +238,7 @@ export default function PointsOfSaleClient({
                           href={`https://wa.me/55${partner.whatsapp.replace(/\D/g, "")}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-bold uppercase tracking-wider"
+                          className="h-11 px-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-1.5 text-emerald-400 font-bold uppercase tracking-wider active:scale-95 transition-transform"
                         >
                           <MessageCircle className="w-4 h-4" />
                           <span>WHATSAPP</span>
@@ -255,7 +257,7 @@ export default function PointsOfSaleClient({
                           href={partner.googleMapsUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-750 text-slate-200 border border-dark-700 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-colors"
+                          className="h-11 px-3.5 rounded-xl bg-dark-800 hover:bg-dark-750 text-slate-200 border border-dark-700 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-colors active:scale-95"
                         >
                           <Navigation className="w-3.5 h-3.5 text-primary-400" />
                           <span>VER NO MAPA</span>
@@ -265,7 +267,7 @@ export default function PointsOfSaleClient({
                           href={`https://maps.google.com/?q=${encodeURIComponent(`${partner.name}, ${partner.address || ""} ${partner.neighborhood} ${partner.city}`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-750 text-slate-200 border border-dark-700 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-colors"
+                          className="h-11 px-3.5 rounded-xl bg-dark-800 hover:bg-dark-750 text-slate-200 border border-dark-700 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-colors active:scale-95"
                         >
                           <Navigation className="w-3.5 h-3.5 text-primary-400" />
                           <span>ABRIR MAPA</span>
