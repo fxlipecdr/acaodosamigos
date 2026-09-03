@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 export default function AdminSettingsClient({ settings }: { settings: any }) {
-  const [title, setTitle] = useState(settings?.title || "Ação dos Amigos da Moto");
+  const [title, setTitle] = useState(settings?.title || "AÇÃO DOS AMIGOS");
   const [subtitle, setSubtitle] = useState(settings?.subtitle || "Concorra a uma motocicleta Honda CG 160 Start com apuração transparente pela Loteria Federal!");
   const [whatsappNumber, setWhatsappNumber] = useState(settings?.whatsappNumber || "+5548992178109");
   const [whatsappMessage, setWhatsappMessage] = useState(settings?.whatsappMessage || "Olá! Vim pelo site da Ação dos Amigos.");

@@ -26,7 +26,7 @@ model AdminUser {
 
 model CampaignSettings {
   id               String   @id @default("default")
-  title            String   @default("Ação dos Amigos")
+  title            String   @default("AÇÃO DOS AMIGOS")
   subtitle         String   @default("Concorra a uma Motocicleta Honda CG 160 Start")
   drawDate         String   @default("2026-11-15")
   drawTime         String   @default("19:00")

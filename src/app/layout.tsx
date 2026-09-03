@@ -34,22 +34,22 @@ export async function generateMetadata(): Promise<Metadata> {
       where: { id: "default" },
     });
 
-    const title = settings?.title || "Ação dos Amigos | Honda CG 160";
+    const title = settings?.title || "AÇÃO DOS AMIGOS";
     const description =
       settings?.subtitle ||
       "Concorra a uma Motocicleta Honda CG 160 com apuração pela Loteria Federal. Apenas R$ 30 por número ou 3 por R$ 63!";
 
     return {
       title: {
-        default: title,
-        template: `%s | ${title}`,
+        default: "AÇÃO DOS AMIGOS",
+        template: "%s | AÇÃO DOS AMIGOS",
       },
       description,
       metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://acaodosamigos.com.br"),
       openGraph: {
-        title,
+        title: "AÇÃO DOS AMIGOS",
         description,
-        siteName: "Ação dos Amigos",
+        siteName: "AÇÃO DOS AMIGOS",
         type: "website",
         locale: "pt_BR",
         images: [
@@ -69,7 +69,7 @@ export async function generateMetadata(): Promise<Metadata> {
       },
       twitter: {
         card: "summary_large_image",
-        title,
+        title: "AÇÃO DOS AMIGOS",
         description,
         images: ["/images/banner-rifa.jpg"],
       },

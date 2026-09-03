@@ -86,7 +86,7 @@ A presente Ação dos Amigos tem como finalidade a arrecadação de fundos atrav
   const campaign = await prisma.campaignSettings.upsert({
     where: { id: "default" },
     update: {
-      title: "Ação dos Amigos da Moto",
+      title: "AÇÃO DOS AMIGOS",
       subtitle: "Concorra a uma motocicleta Honda CG 160 Start com apuração transparente pela Loteria Federal!",
       drawDate: "2026-11-15",
       drawTime: "19:00",
@@ -121,7 +121,7 @@ A presente Ação dos Amigos tem como finalidade a arrecadação de fundos atrav
     },
     create: {
       id: "default",
-      title: "Ação dos Amigos da Moto",
+      title: "AÇÃO DOS AMIGOS",
       subtitle: "Concorra a uma motocicleta Honda CG 160 Start com apuração transparente pela Loteria Federal!",
       drawDate: "2026-11-15",
       drawTime: "19:00",

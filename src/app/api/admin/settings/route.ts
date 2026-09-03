@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       },
       create: {
         id: "default",
-        title: body.title || "Ação dos Amigos da Moto",
+        title: body.title || "AÇÃO DOS AMIGOS",
         subtitle: body.subtitle || "",
         whatsappNumber: body.whatsappNumber || "+5548992178109",
         whatsappMessage: body.whatsappMessage || "Olá!",
