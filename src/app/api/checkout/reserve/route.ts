@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import db from "@/lib/db";
 import crypto from "crypto";
+import { getOnlineRange, validateOnlineNumbers } from "@/lib/onlineRange";
 
 export const dynamic = "force-dynamic";
 
@@ -9,9 +10,13 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { numbers, sessionId } = body;
 
-    if (!Array.isArray(numbers) || numbers.length === 0) {
+    // A faixa online é imposta aqui, não só na tela: a grade esconde os
+    // números presenciais, mas qualquer requisição direta chegaria sem eles.
+    const range = await getOnlineRange();
+    const rangeError = validateOnlineNumbers(numbers, range);
+    if (rangeError) {
       return NextResponse.json(
-        { success: false, error: "Nenhum número selecionado." },
+        { success: false, error: rangeError },
         { status: 400 }
       );
     }

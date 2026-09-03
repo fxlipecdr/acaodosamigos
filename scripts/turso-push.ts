@@ -11,6 +11,7 @@
  * É idempotente: cada CREATE recebe IF NOT EXISTS, então rodar de novo em um
  * banco já criado não apaga nem duplica nada.
  */
+import "dotenv/config";
 import { createClient } from "@libsql/client";
 import { execSync } from "node:child_process";
 

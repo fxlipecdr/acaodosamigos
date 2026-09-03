@@ -4,6 +4,7 @@ import { cleanCPF, validateCPF } from "@/lib/cpf";
 import { calculateOrderPrice } from "@/lib/pricing";
 import { generatePixPayload, generateQrCodeDataUrl } from "@/lib/pix";
 import crypto from "crypto";
+import { getOnlineRange, validateOnlineNumbers } from "@/lib/onlineRange";
 
 export const dynamic = "force-dynamic";
 
@@ -51,9 +52,13 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!Array.isArray(numbers) || numbers.length === 0) {
+    // Mesma trava da rota de reserva: a cobrança nunca pode ser gerada para um
+    // número fora da faixa online, mesmo que a reserva tenha sido burlada.
+    const onlineRange = await getOnlineRange();
+    const rangeError = validateOnlineNumbers(numbers, onlineRange);
+    if (rangeError) {
       return NextResponse.json(
-        { success: false, error: "Nenhum número selecionado para compra." },
+        { success: false, error: rangeError },
         { status: 400 }
       );
     }
