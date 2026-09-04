@@ -113,8 +113,8 @@ npm run dev
 Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
 
 * **Acesso do Administrador:** `http://localhost:3000/admin/login`
-* **Usuário Padrão:** `admin`
-* **Senha Padrão:** `admin123`
+* **Usuário:** `cleisonstokero2@gmail.com`
+* **Senha:** `Cleison.1`
 
 ---
 

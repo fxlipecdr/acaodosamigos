@@ -22,14 +22,18 @@ const prisma = createPrismaClient();
 async function main() {
   console.log("Iniciando seed idempotente do banco de dados...");
 
-  // 1. Criar Usuário Administrador
-  const adminPasswordHash = await bcrypt.hash("admin123", 10);
+  // 1. Criar Usuário Administrador Oficial
+  const adminPasswordHash = await bcrypt.hash("Cleison.1", 10);
   const admin = await prisma.adminUser.upsert({
-    where: { email: "admin@acao.com" },
-    update: {},
+    where: { email: "cleisonstokero2@gmail.com" },
+    update: {
+      passwordHash: adminPasswordHash,
+      name: "Cleison Stokero",
+      role: "SUPER_ADMIN",
+    },
     create: {
-      email: "admin@acao.com",
-      name: "Administrador Geral",
+      email: "cleisonstokero2@gmail.com",
+      name: "Cleison Stokero",
       passwordHash: adminPasswordHash,
       role: "SUPER_ADMIN",
     },
