@@ -47,7 +47,7 @@ export default function CheckoutPage() {
   const [simulating, setSimulating] = useState(false);
 
   const [timeLeft, setTimeLeft] = useState<number>(15 * 60);
-  const isDevMode = process.env.NODE_ENV !== "production" || process.env.NEXT_PUBLIC_ENABLE_DEMO === "true";
+  const isDevMode = process.env.NODE_ENV !== "production";
 
   useEffect(() => {
     const stored = sessionStorage.getItem("currentReservation");

@@ -6,11 +6,35 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
+    // 1. Validação de token se configurado ASAAS_WEBHOOK_SECRET
+    const webhookSecret = process.env.ASAAS_WEBHOOK_SECRET;
+    if (webhookSecret && webhookSecret.trim().length > 0) {
+      const incomingToken = request.headers.get("asaas-access-token");
+      if (incomingToken && incomingToken !== webhookSecret) {
+        console.warn("Webhook rejeitado: cabeçalho asaas-access-token inválido.");
+        return NextResponse.json({ success: false, error: "Não autorizado." }, { status: 401 });
+      }
+    }
+
     const payload = await request.json();
     console.log("Recebido Webhook Pix:", JSON.stringify(payload));
 
-    // Identificação de txid / orderCode dependendo do formato do gateway
-    let orderCode = payload.orderCode || payload.txid || payload.externalReference;
+    // 2. Se for evento específico do Asaas, só processa liquidações
+    if (
+      payload.event &&
+      payload.event !== "PAYMENT_RECEIVED" &&
+      payload.event !== "PAYMENT_CONFIRMED"
+    ) {
+      return NextResponse.json({ received: true, message: `Evento ignorado (${payload.event})` });
+    }
+
+    // 3. Identificação de txid / orderCode (incluindo formato Asaas: payload.payment.externalReference)
+    let orderCode =
+      payload.orderCode ||
+      payload.txid ||
+      payload.externalReference ||
+      payload.payment?.externalReference;
+
     if (orderCode && orderCode.startsWith("LDPG") === false && orderCode.length === 10) {
       // Ex: LDPG847291 -> LDPG-847291
       orderCode = `LDPG-${orderCode.substring(4)}`;

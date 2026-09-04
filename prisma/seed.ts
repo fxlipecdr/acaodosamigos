@@ -104,7 +104,7 @@ A presente Ação dos Amigos tem como finalidade a arrecadação de fundos atrav
       whatsappNumber: "+5548992178109",
       whatsappMessage: "Olá! Vim pelo site da Ação dos Amigos e gostaria de tirar uma dúvida sobre a moto.",
       instagramUrl: "",
-      contactEmail: "contato@acaodosamigos.com.br",
+      contactEmail: "contato@acaoamigos.com.br",
       rulesText: defaultRules,
       prizeModel: "Honda CG 160 Start",
       prizeYear: "2023",

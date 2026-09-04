@@ -23,7 +23,7 @@ export default function AdminQrCodeClient({
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const [targetUrl, setTargetUrl] = useState<string>("");
 
-  const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://acaodosamigos.com.br";
+  const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://acaoamigos.com.br";
 
   useEffect(() => {
     let url = baseUrl;

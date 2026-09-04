@@ -45,7 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
         template: "%s | AÇÃO DOS AMIGOS",
       },
       description,
-      metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://acaodosamigos.com.br"),
+      metadataBase: new URL(process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://acaoamigos.com.br"),
       openGraph: {
         title: "AÇÃO DOS AMIGOS",
         description,

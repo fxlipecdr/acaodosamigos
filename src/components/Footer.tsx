@@ -108,7 +108,7 @@ export default function Footer() {
               Dúvidas sobre reservas, comprovantes Pix ou pontos de venda?
             </p>
             <a
-              href="https://wa.me/5548992178109?text=Olá!%20Gostaria%20de%20tirar%20uma%20dúvida%20sobre%20a%20Ação%20Entre%20Amigos."
+              href="https://wa.me/5548992178109?text=Olá!%20Gostaria%20de%20tirar%20uma%20dúvida%20sobre%20a%20Ação%20dos%20Amigos."
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 h-12 px-4 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold uppercase tracking-wider transition-colors active:scale-95"

@@ -6,6 +6,7 @@ import { generatePixPayload, generateQrCodeDataUrl } from "@/lib/pix";
 import crypto from "crypto";
 import { getOnlineRange, validateOnlineNumbers } from "@/lib/onlineRange";
 import { checkRateLimit } from "@/lib/rateLimit";
+import { isAsaasConfigured, createAsaasPixPayment } from "@/lib/asaas";
 
 export const dynamic = "force-dynamic";
 
@@ -162,24 +163,58 @@ export async function POST(request: Request) {
         },
       });
 
-      // f) Gerar Pix
-      const pixKey = (settings?.whatsappNumber || "48992178109").replace(/\D/g, "");
-      const pixPayload = generatePixPayload({
-        key: pixKey,
-        name: "ACAO DOS AMIGOS MOTO",
-        city: "TUBARAO",
-        amount: pricing.finalTotal,
-        txid: orderCode.replace("-", ""),
-        description: `Rifa Moto - ${numbers.length} cotas`,
-      });
+      // f) Gerar Pix (Asaas dinâmico se configurado, ou fallback estático padrão)
+      let pixPayload = "";
+      let qrCodeBase64 = "";
+      let activeGateway = settings?.activeGateway || "MOCK_PIX";
+      let gatewayPaymentId: string | null = null;
 
-      const qrCodeBase64 = await generateQrCodeDataUrl(pixPayload);
+      if (isAsaasConfigured()) {
+        activeGateway = "ASAAS";
+        try {
+          const asaasResult = await createAsaasPixPayment({
+            orderCode,
+            customer: {
+              fullName: participant.fullName,
+              cpf: participant.cpf,
+              whatsapp: participant.whatsapp,
+              email: participant.email,
+            },
+            value: pricing.finalTotal,
+            description: `Ação dos Amigos - Pedido ${orderCode} (${numbers.length} cotas)`,
+          });
+
+          if (asaasResult.success && asaasResult.pixCopiaECola && asaasResult.qrCodeBase64) {
+            pixPayload = asaasResult.pixCopiaECola;
+            qrCodeBase64 = asaasResult.qrCodeBase64;
+            gatewayPaymentId = asaasResult.paymentId || null;
+          } else {
+            console.warn("Aviso Asaas, usando fallback local de Pix:", asaasResult.error);
+          }
+        } catch (asaasErr) {
+          console.error("Erro ao chamar Asaas Pix, aplicando fallback:", asaasErr);
+        }
+      }
+
+      if (!pixPayload) {
+        const pixKey = (settings?.whatsappNumber || "48992178109").replace(/\D/g, "");
+        pixPayload = generatePixPayload({
+          key: pixKey,
+          name: "ACAO DOS AMIGOS MOTO",
+          city: "TUBARAO",
+          amount: pricing.finalTotal,
+          txid: orderCode.replace("-", ""),
+          description: `Rifa Moto - ${numbers.length} cotas`,
+        });
+        qrCodeBase64 = await generateQrCodeDataUrl(pixPayload);
+      }
 
       // g) Registrar Pagamento no banco
       const payment = await tx.payment.create({
         data: {
           purchaseId: purchase.id,
-          gateway: settings?.activeGateway || "MOCK_PIX",
+          gateway: activeGateway,
+          gatewayPaymentId,
           amount: pricing.finalTotal,
           pixCopiaECola: pixPayload,
           qrCodeBase64,

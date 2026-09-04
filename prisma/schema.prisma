@@ -44,7 +44,7 @@ model CampaignSettings {
   whatsappNumber   String   @default("+5548992178109")
   whatsappMessage  String   @default("Olá! Vim pelo site da Ação dos Amigos e gostaria de tirar uma dúvida.")
   instagramUrl     String?
-  contactEmail     String   @default("suporte@acaodosamigos.com.br")
+  contactEmail     String   @default("suporte@acaoamigos.com.br")
   rulesText        String
   prizeModel       String   @default("Honda CG 160 Start")
   prizeYear        String   @default("2023")

@@ -14,7 +14,7 @@ export interface PurchaseNotificationData {
  * Monta o texto padronizado do comprovante para o WhatsApp
  */
 export function formatPurchaseWhatsAppText(data: PurchaseNotificationData): string {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://acaodosamigos.com.br";
+  const siteUrl = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://acaoamigos.com.br";
   const formattedNumbers = data.numbers.sort((a, b) => a - b).join(", ");
   const formattedTotal = new Intl.NumberFormat("pt-BR", {
     style: "currency",
