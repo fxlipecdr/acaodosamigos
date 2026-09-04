@@ -47,6 +47,7 @@ export default function CheckoutPage() {
   const [simulating, setSimulating] = useState(false);
 
   const [timeLeft, setTimeLeft] = useState<number>(15 * 60);
+  const isDevMode = process.env.NODE_ENV !== "production" || process.env.NEXT_PUBLIC_ENABLE_DEMO === "true";
 
   useEffect(() => {
     const stored = sessionStorage.getItem("currentReservation");
@@ -668,32 +669,34 @@ export default function CheckoutPage() {
               </details>
             </div>
 
-            {/* Modo de demonstração */}
-            <div className="pt-4 border-t border-dark-750">
-              <div className="p-3 rounded-xl bg-dark-900 border border-dark-750 space-y-2">
-                <span className="flex items-center justify-center gap-1 text-amber-400 font-bold uppercase tracking-wider text-[11px]">
-                  <Zap className="w-3.5 h-3.5" />
-                  Ambiente de demonstração
-                </span>
-                <button
-                  onClick={handleSimulatePayment}
-                  disabled={simulating}
-                  className="w-full h-12 rounded-xl bg-emerald-600 active:bg-emerald-500 text-white font-black text-xs uppercase tracking-wider shadow-md flex items-center justify-center gap-1.5 transition-all active:scale-[0.98]"
-                >
-                  {simulating ? (
-                    <>
-                      <RefreshCw className="w-4 h-4 animate-spin" />
-                      <span>Confirmando...</span>
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle2 className="w-4 h-4" />
-                      <span>Simular pagamento Pix</span>
-                    </>
-                  )}
-                </button>
+            {/* Modo de demonstração (visível apenas em ambiente de testes/desenvolvimento) */}
+            {isDevMode && (
+              <div className="pt-4 border-t border-dark-750">
+                <div className="p-3 rounded-xl bg-dark-900 border border-dark-750 space-y-2">
+                  <span className="flex items-center justify-center gap-1 text-amber-400 font-bold uppercase tracking-wider text-[11px]">
+                    <Zap className="w-3.5 h-3.5" />
+                    Ambiente de demonstração
+                  </span>
+                  <button
+                    onClick={handleSimulatePayment}
+                    disabled={simulating}
+                    className="w-full h-12 rounded-xl bg-emerald-600 active:bg-emerald-500 text-white font-black text-xs uppercase tracking-wider shadow-md flex items-center justify-center gap-1.5 transition-all active:scale-[0.98]"
+                  >
+                    {simulating ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <span>Confirmando...</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Simular pagamento Pix</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="flex items-center justify-center gap-2 text-[11px] text-slate-400 uppercase font-semibold">
               <RefreshCw className="w-3.5 h-3.5 text-primary-400 animate-spin" />

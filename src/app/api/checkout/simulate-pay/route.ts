@@ -6,6 +6,14 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
+    // Bloqueia simulação em ambiente de produção (a menos que explicitamente liberado)
+    if (process.env.NODE_ENV === "production" && process.env.ENABLE_DEMO_PAY !== "true") {
+      return NextResponse.json(
+        { success: false, error: "Simulação de pagamento desativada em ambiente de produção." },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const { orderCode } = body;
 

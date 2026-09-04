@@ -19,7 +19,7 @@ export default function PrivacidadePage() {
         <section className="space-y-2">
           <h2 className="text-base font-bold text-foreground">2. Proteção e Não Divulgação Pública</h2>
           <p>
-            Seu CPF, telefone e informações financeiras <strong>nunca são exibidos publicamente</strong> em listas ou buscas. A consulta de bilhetes pelo participante exige validação em duas etapas (código de segurança via WhatsApp/E-mail).
+            Seu CPF, telefone e informações financeiras <strong>nunca são exibidos publicamente</strong> em listas ou buscas. A consulta de bilhetes pelo participante exige a confirmação de segurança com o CPF associado aos 4 últimos dígitos do WhatsApp cadastrado.
           </p>
         </section>
 
