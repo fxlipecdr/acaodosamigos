@@ -1,0 +1,21 @@
+# Arquivos que o `vercel --prod` (deploy pela linha de comando) NÃO deve enviar.
+# A CLI ignora o .gitignore: sem esta lista, o .env local subiria junto,
+# levando segredos e valores de desenvolvimento (ex.: NEXT_PUBLIC_SITE_URL
+# apontando para localhost, que o Next grava no código durante o build).
+# Em produção, as variáveis vêm de Settings → Environment Variables.
+
+.env
+.env.*
+!.env.example
+
+# Bancos e artefatos locais
+*.db
+*.db-journal
+prisma/dev.db
+*.tmp.ts
+*.tmp.mjs
+teste-turso.db
+
+# Ferramentas locais
+.claude
+tsconfig.tsbuildinfo
