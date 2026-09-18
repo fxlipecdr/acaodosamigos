@@ -1,16 +1,19 @@
 import { NextResponse } from "next/server";
 import db from "@/lib/db";
 import { sendWhatsAppApiNotification } from "@/lib/notifications";
+import { isAsaasConfigured, verifyAsaasPayment } from "@/lib/asaas";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
     // 1. Validação de token se configurado ASAAS_WEBHOOK_SECRET
+    // Com segredo configurado, o cabeçalho é OBRIGATÓRIO. Antes só um token
+    // errado era recusado — uma requisição sem cabeçalho passava direto.
     const webhookSecret = process.env.ASAAS_WEBHOOK_SECRET;
     if (webhookSecret && webhookSecret.trim().length > 0) {
       const incomingToken = request.headers.get("asaas-access-token");
-      if (incomingToken && incomingToken !== webhookSecret) {
+      if (incomingToken !== webhookSecret) {
         console.warn("Webhook rejeitado: cabeçalho asaas-access-token inválido.");
         return NextResponse.json({ success: false, error: "Não autorizado." }, { status: 401 });
       }
@@ -60,6 +63,25 @@ export async function POST(request: Request) {
     // Idempotência: se já pago, apenas responde OK
     if (purchase.status === "COMPLETED") {
       return NextResponse.json({ received: true, message: "Já processado anteriormente" });
+    }
+
+    // Fonte da verdade é o Asaas, não o corpo da requisição.
+    if (isAsaasConfigured()) {
+      const paymentId = payload.payment?.id || purchase.payments[0]?.gatewayPaymentId;
+      if (!paymentId) {
+        console.warn(`Webhook ${orderCode}: sem id de cobrança do Asaas para conferir.`);
+        return NextResponse.json({ received: true, message: "Sem cobrança para conferir" });
+      }
+      const check = await verifyAsaasPayment({
+        paymentId,
+        orderCode: purchase.code,
+        expectedValue: purchase.totalPaid,
+      });
+      if (!check.paid) {
+        console.warn(`Webhook ${orderCode} recusado: ${check.reason}`);
+        // 200 para o Asaas não penalizar a fila; nada é alterado no banco.
+        return NextResponse.json({ received: true, message: `Pagamento não confirmado: ${check.reason}` });
+      }
     }
 
     const now = new Date();

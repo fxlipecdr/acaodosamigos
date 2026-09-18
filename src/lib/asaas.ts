@@ -32,6 +32,43 @@ interface AsaasPaymentResult {
 }
 
 /**
+ * Confere na API do Asaas se uma cobrança foi realmente paga.
+ *
+ * O webhook não pode confiar no corpo da requisição: qualquer um que saiba um
+ * código de pedido (ele aparece na tela do Pix) poderia forjar um
+ * "PAYMENT_RECEIVED". Aqui a fonte da verdade é o próprio Asaas.
+ */
+const PAID_STATUSES = ["RECEIVED", "CONFIRMED", "RECEIVED_IN_CASH"];
+
+export async function verifyAsaasPayment(input: {
+  paymentId: string;
+  orderCode: string;
+  expectedValue: number;
+}): Promise<{ paid: boolean; reason?: string }> {
+  try {
+    const res = await fetch(`${ASAAS_API_URL}/payments/${encodeURIComponent(input.paymentId)}`, {
+      headers: { access_token: ASAAS_API_KEY },
+      cache: "no-store",
+    });
+    if (!res.ok) return { paid: false, reason: `Asaas respondeu HTTP ${res.status}` };
+
+    const p = await res.json();
+    if (p.externalReference !== input.orderCode) {
+      return { paid: false, reason: "cobrança não pertence a este pedido" };
+    }
+    if (!PAID_STATUSES.includes(p.status)) {
+      return { paid: false, reason: `status no Asaas: ${p.status}` };
+    }
+    if (Number(p.value) + 0.01 < input.expectedValue) {
+      return { paid: false, reason: `valor pago (${p.value}) menor que o pedido (${input.expectedValue})` };
+    }
+    return { paid: true };
+  } catch (err: any) {
+    return { paid: false, reason: `falha ao consultar o Asaas: ${err?.message || err}` };
+  }
+}
+
+/**
  * Busca ou cadastra o cliente no Asaas
  */
 async function getOrCreateAsaasCustomer(input: AsaasCustomerInput): Promise<string> {
