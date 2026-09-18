@@ -89,6 +89,22 @@ export default function AdminNumbersClient({
 
   // Status Action (Block, Unblock, Release)
   const handleAction = async (number: number, action: "BLOCK" | "UNBLOCK" | "RELEASE") => {
+    const current = numbers.find((n) => n.number === number);
+
+    // Liberar um número pago tira o bilhete do comprador — pede confirmação.
+    if (action === "RELEASE" && current?.status === "PAID") {
+      const ok = confirm(
+        `O número ${number} está PAGO${current.participant ? ` por ${current.participant.fullName}` : ""}.\n\nLiberar remove o bilhete desse comprador e o devolve à venda. Continuar?`
+      );
+      if (!ok) return;
+    }
+    if (action === "RELEASE" && current?.status === "PENDING_PAYMENT") {
+      const ok = confirm(
+        `O número ${number} tem um Pix gerado aguardando pagamento.\n\nSe o comprador pagar depois da liberação, o número pode acabar com dois donos. Continuar?`
+      );
+      if (!ok) return;
+    }
+
     try {
       setActionLoading(number);
       const res = await fetch("/api/admin/numbers/action", {
@@ -99,8 +115,24 @@ export default function AdminNumbersClient({
 
       const data = await res.json();
       if (data.success) {
+        // A rota devolve o registro atualizado em `data.number` (não existe
+        // `newStatus`). Ao liberar/desbloquear, o comprador e o ponto de venda
+        // também são desvinculados no banco, então a linha limpa os dois.
+        const updated = data.number;
+        const cleared = action === "RELEASE" || action === "UNBLOCK";
         setNumbers((prev) =>
-          prev.map((n) => (n.number === number ? { ...n, status: data.newStatus } : n))
+          prev.map((n) =>
+            n.number === number
+              ? {
+                  ...n,
+                  status: updated.status,
+                  pricePaid: updated.pricePaid,
+                  updatedAt: updated.updatedAt,
+                  participant: cleared ? null : n.participant,
+                  partner: cleared ? null : n.partner,
+                }
+              : n
+          )
         );
       } else {
         alert(data.error || "Erro ao executar ação.");
@@ -157,7 +189,8 @@ export default function AdminNumbersClient({
               <option value="ALL">TODOS OS STATUS</option>
               <option value="AVAILABLE">DISPONÍVEL</option>
               <option value="PAID">PAGO (CONFIRMADO)</option>
-              <option value="RESERVED">RESERVADO (PIX PENDENTE)</option>
+              <option value="RESERVED">RESERVADO (NO CARRINHO)</option>
+              <option value="PENDING_PAYMENT">AGUARDANDO PIX</option>
               <option value="BLOCKED">BLOQUEADO</option>
             </select>
           </div>
@@ -224,6 +257,7 @@ export default function AdminNumbersClient({
                 const isReserved = item.status === "RESERVED";
                 const isBlocked = item.status === "BLOCKED";
                 const isAvailable = item.status === "AVAILABLE";
+                const isPendingPix = item.status === "PENDING_PAYMENT";
 
                 return (
                   <tr key={item.number} className="hover:bg-dark-800/50 transition-colors">
@@ -242,6 +276,10 @@ export default function AdminNumbersClient({
                       ) : isAvailable ? (
                         <span className="inline-flex items-center gap-1 text-[11px] text-slate-400 bg-dark-900 border border-dark-700 px-2 py-0.5 rounded">
                           DISPONÍVEL
+                        </span>
+                      ) : isPendingPix ? (
+                        <span className="inline-flex items-center gap-1 text-[11px] text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2 py-0.5 rounded">
+                          <Clock className="w-3 h-3" /> AGUARDANDO PIX
                         </span>
                       ) : isReserved ? (
                         <span className="inline-flex items-center gap-1 text-[11px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">
